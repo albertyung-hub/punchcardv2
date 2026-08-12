@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Punch Card — Cross-Café Loyalty Network</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf9f7;--bg-2:#f3f1ed;--bg-3:#ebe8e3;
+  --surface:#ffffff;--surface-2:#f8f7f5;
+  --text:#1a1a1a;--text-2:#5c5c5c;--text-3:#9a9590;--text-4:#c4bfb8;
+  --border:#e3e0db;--border-2:#d5d1cb;
+  --accent:#c25e00;--accent-2:#e87b1e;--accent-bg:#fff3e6;
+  --green:#2d7a3e;--green-bg:#e8f5e9;--green-2:#1b5e27;
+  --red:#b42318;--red-bg:#fde8e6;
+  --blue:#1e5aa8;--blue-bg:#e8f0fe;
+  --purple:#6b3a8c;--purple-bg:#f3e8fd;
+  --teal:#0d7377;--teal-bg:#e0f7f7;
+  --radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-xl:20px;--radius-full:999px;
+  --shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.05);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.08),0 16px 48px rgba(0,0,0,.06);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --t:.2s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button,input,select,textarea{font-family:inherit;font-size:inherit}
+button{cursor:pointer;border:none;background:none}
+a{color:inherit;text-decoration:none}
+.hide{display:none!important}
+.c{text-align:center}
+.flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-4{gap:4px}.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+.w-full{width:100%}.h-full{height:100%}
+.p-16{padding:16px}.p-20{padding:20px}.p-24{padding:24px}
+.mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}.mt-20{margin-top:20px}.mt-24{margin-top:24px}.mt-32{margin-top:32px}
+.mb-4{margin-bottom:4px}.mb-8{margin-bottom:8px}.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}.mb-20{margin-bottom:20px}.mb-24{margin-bottom:24px}
+.text-xs{font-size:12px}.text-sm{font-size:14px}.text-base{font-size:16px}.text-lg{font-size:18px}.text-xl{font-size:20px}.text-2xl{font-size:24px}.text-3xl{font-size:28px}.text-4xl{font-size:36px}
+.font-500{font-weight:500}.font-600{font-weight:600}.font-700{font-weight:700}
+.text-2{color:var(--text-2)}.text-3{color:var(--text-3)}.text-4{color:var(--text-4)}
+.tracking-tight{letter-spacing:-0.5px}
+.container{max-width:1120px;margin:0 auto;padding:0 20px}
+.section{padding:72px 0}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(250,249,247,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-0.3px}
+.logo-mark{width:32px;height:32px;background:var(--text);color:var(--surface);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:14px;color:var(--text-2);font-weight:500;transition:color var(--t)}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{padding:10px 20px;background:var(--text);color:var(--surface);border-radius:var(--radius-md);font-size:14px;font-weight:500;transition:opacity var(--t);border:none}
+.nav-cta:hover{opacity:.85}
+
+/* HERO */
+.hero{padding:80px 0 48px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:var(--accent-bg);color:var(--accent);border-radius:var(--radius-full);font-size:13px;font-weight:500;margin-bottom:20px}
+.hero h1{font-size:48px;font-weight:700;line-height:1.05;letter-spacing:-1.5px;margin-bottom:16px;max-width:680px;margin-left:auto;margin-right:auto}
+.hero p{font-size:19px;color:var(--text-2);max-width:520px;margin:0 auto 32px;line-height:1.5}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{padding:14px 28px;border-radius:var(--radius-md);font-size:16px;font-weight:500;transition:all var(--t);display:inline-flex;align-items:center;gap:8px;border:none}
+.btn-pri{background:var(--text);color:var(--surface)}
+.btn-pri:hover{opacity:.88;transform:translateY(-1px)}
+.btn-sec{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.btn-sec:hover{border-color:var(--text-3)}
+.btn-accent{background:var(--accent);color:var(--surface)}
+.btn-accent:hover{opacity:.9;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border-2)}
+.btn-outline:hover{border-color:var(--text-3)}
+.btn-sm{padding:10px 18px;font-size:14px}
+.btn-lg{padding:16px 32px;font-size:18px}
+
+/* APP SHELL */
+.app-shell{position:fixed;inset:0;background:var(--bg);z-index:200;overflow:hidden;display:flex;flex-direction:column}
+.app-shell .app-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+/* CUSTOMER APP */
+.cust-app{max-width:420px;margin:0 auto;height:100%;display:flex;flex-direction:column;position:relative;background:var(--surface)}
+.cust-head{display:flex;align-items:center;gap:8px;padding:16px 20px 12px;min-height:56px;border-bottom:1px solid var(--border)}
+.cust-head h2{font-size:18px;font-weight:600;flex:1;margin:0}
+.cust-back{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:transparent;transition:background var(--t);color:var(--text)}
+.cust-back:hover{background:var(--bg-2)}
+.cust-back svg{width:20px;height:20px}
+.cust-scr{flex:1;overflow-y:auto;padding:20px;display:none;animation:slideUp .25s ease}
+.cust-scr.on{display:block}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.cust-tabbar{display:flex;border-top:1px solid var(--border);background:var(--surface);padding:6px 0}
+.cust-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:none;font:inherit;font-size:11px;color:var(--text-3);cursor:pointer;padding:4px;transition:color var(--t)}
+.cust-tab.on{color:var(--text)}
+.cust-tab svg{width:22px;height:22px}
+
+/* CAFE DASHBOARD */
+.cafe-shell{display:flex;height:100%}
+.cafe-sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0}
+.cafe-sidebar .logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.cafe-nav{display:flex;flex-direction:column;gap:2px;padding:0 12px}
+.cafe-nav-btn{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--radius-md);font-size:14px;font-weight:500;color:var(--text-2);background:transparent;transition:all var(--t);width:100%;border:none}
+.cafe-nav-btn:hover{background:var(--bg-2);color:var(--text)}
+.cafe-nav-btn.on{background:var(--text);color:var(--surface)}
+.cafe-nav-btn svg{width:18px;height:18px;flex-shrink:0}
+.cafe-main{flex:1;overflow-y:auto;padding:28px 32px;background:var(--bg)}
+.cafe-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.cafe-top h1{font-size:24px;font-weight:700;letter-spacing:-0.5px}
+
+/* ADMIN PANEL */
+.admin-shell{display:flex;height:100%}
+.admin-sidebar{width:260px;background:var(--text);color:var(--surface);display:flex;flex-direction:column;padding:24px 0}
+.admin-sidebar .logo{color:var(--surface);padding:0 24px 24px}
+.admin-sidebar .logo-mark{background:var(--surface);color:var(--text)}
+.admin-nav{display:flex;flex-direction:column;gap:4px;padding:0 16px}
+.admin-nav-btn{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:var(--radius-md);font-size:14px;font-weight:500;color:var(--text-3);background:transparent;transition:all var(--t);width:100%;border:none}
+.admin-nav-btn:hover{color:var(--surface);background:rgba(255,255,255,.08)}
+.admin-nav-btn.on{color:var(--surface);background:rgba(255,255,255,.12)}
+.admin-nav-btn svg{width:18px;height:18px;flex-shrink:0}
+.admin-main{flex:1;overflow-y:auto;padding:28px 32px;background:var(--bg-2)}
+
+/* COMPONENTS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;transition:all var(--t)}
+.card-hover:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--border-2)}
+.card-2{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--radius-full);font-size:12px;font-weight:500}
+.badge-green{background:var(--green-bg);color:var(--green-2)}
+.badge-amber{background:#fff8e1;color:#b45309}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+.badge-purple{background:var(--purple-bg);color:var(--purple)}
+
+.stamp-grid{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:20px 0}
+.stamp{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all var(--t);font-size:18px}
+.stamp.filled{background:var(--text);color:var(--surface);box-shadow:var(--shadow)}
+.stamp.empty{border:2px solid var(--border-2);color:var(--text-4)}
+.stamp.accent{background:var(--accent);color:var(--surface)}
+.stamp.green{background:var(--green);color:var(--surface)}
+
+.qr-box{width:180px;height:180px;margin:0 auto;padding:16px;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface)}
+.qr-lg{width:240px;height:240px;padding:20px}
+
+.app-btn{width:100%;padding:14px;border-radius:var(--radius-md);font-size:16px;font-weight:500;transition:all var(--t);margin-top:12px;border:none}
+.app-btn-pri{background:var(--text);color:var(--surface)}
+.app-btn-pri:hover{opacity:.88}
+.app-btn-sec{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.app-btn-sec:hover{border-color:var(--text-3)}
+
+.fld{margin-bottom:16px}
+.fld label{display:block;font-size:13px;font-weight:500;color:var(--text-2);margin-bottom:6px}
+.fld input,.fld select,.fld textarea{width:100%;padding:12px 14px;border:1px solid var(--border-2);border-radius:var(--radius-md);font-size:16px;background:var(--surface);color:var(--text);outline:none;transition:border-color var(--t)}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--text-3)}
+.fld input::placeholder{color:var(--text-4)}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)}
+th{font-weight:600;color:var(--text-2);font-size:13px;background:var(--surface-2);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg-2)}
+
+.cafe-card-row{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:12px;background:var(--surface);cursor:pointer;transition:all var(--t)}
+.cafe-card-row:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--border-2)}
+.cafe-av{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;flex-shrink:0}
+.cafe-meta{flex:1;min-width:0}
+.cafe-meta h4{margin:0 0 3px;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cafe-meta p{margin:0;font-size:14px;color:var(--text-2)}
+.stamp-dots{display:flex;gap:5px;margin-top:8px}
+.dot{width:9px;height:9px;border-radius:50%}
+.dot.on{background:var(--text)}
+.dot.off{background:var(--border-2)}
+
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+.stat-box{padding:20px;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);transition:all var(--t)}
+.stat-box:hover{border-color:var(--border-2)}
+.stat-box .num{font-size:32px;font-weight:700;letter-spacing:-1px;margin-bottom:4px;line-height:1}
+.stat-box .lbl{font-size:14px;color:var(--text-2)}
+
+.scan-frame{width:100%;aspect-ratio:1;border:2px dashed var(--border-2);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;position:relative;margin:20px 0;background:var(--surface-2)}
+.scan-frame::before{content:'';position:absolute;inset:16px;border:2px solid var(--text);border-radius:10px;opacity:.12}
+.scan-line{position:absolute;top:20%;left:10%;right:10%;height:2px;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:scan 2s ease-in-out infinite}
+@keyframes scan{0%,100%{top:15%}50%{top:85%}}
+
+.pop{animation:pop .4s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes pop{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}
+
+@media(max-width:900px){
+  .cafe-sidebar,.admin-sidebar{display:none}
+  .hero h1{font-size:32px}
+  .section{padding:48px 0}
+  .stats-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .nav-links{display:none}
+  .hero{padding:48px 0 32px}
+  .hero h1{font-size:26px}
+  .hero p{font-size:17px}
+  .cafe-main,.admin-main{padding:16px}
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-4)}
+
+/* ===== WALLET PUNCH CARD ===== */
+.wallet-card{background:linear-gradient(145deg,#f5e6d3,#e8d5c0);border:1px solid #d4b896;border-radius:var(--radius-xl);padding:24px 20px;position:relative;overflow:hidden;box-shadow:var(--shadow-md)}
+.wallet-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),#e87b1e)}
+.wallet-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.wallet-card-title{font-size:13px;font-weight:700;color:#6b4226;letter-spacing:1.5px;text-transform:uppercase}
+.wallet-card-cafes{font-size:12px;color:#8b6f47}
+.wallet-stamps-row{display:flex;gap:8px;justify-content:center;margin:16px 0}
+.wallet-stamp{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;transition:all var(--t)}
+.wallet-stamp.filled{background:#6b4226;border:2px solid #6b4226;box-shadow:0 2px 8px rgba(107,66,38,.3)}
+.wallet-stamp.empty{background:transparent;border:2px dashed #b8956a}
+.wallet-stamp.free{border:2px solid var(--accent);background:var(--accent-bg)}
+.wallet-stamp-num{position:absolute;font-size:9px;font-weight:700;color:#b8956a;top:-2px}
+.wallet-stamp.filled .wallet-stamp-num{color:#d4b896}
+.wallet-stamp.free .wallet-stamp-num{color:var(--accent)}
+.wallet-progress{height:4px;background:#d4b896;border-radius:var(--radius-full);overflow:hidden;margin-top:12px}
+.wallet-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),#e87b1e);border-radius:var(--radius-full);transition:width .5s ease}
+.wallet-footer{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:12px;border-top:1px dashed #c4a882}
+.wallet-reward-text{font-size:13px;font-weight:600;color:#6b4226}
+.wallet-reward-status{font-size:12px;color:#8b6f47}
+
+/* ===== SCAN & PENDING ===== */
+.scan-btn{width:100%;padding:16px;border-radius:var(--radius-lg);border:2px dashed var(--border-2);background:var(--surface);color:var(--text-2);font-size:16px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all var(--t);cursor:pointer;margin-bottom:16px}
+.scan-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+.scan-btn svg{width:32px;height:32px}
+.pending-card{padding:16px;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.pending-card .cafe-av{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0}
+.pending-meta{flex:1}
+.pending-meta h4{margin:0 0 2px;font-size:15px;font-weight:600}
+.pending-meta p{margin:0;font-size:13px;color:var(--text-2)}
+.pending-actions{display:flex;gap:8px}
+.pending-actions button{padding:8px 16px;border-radius:var(--radius-md);font-size:13px;font-weight:500;border:none;cursor:pointer;transition:opacity var(--t)}
+.pending-actions .approve{background:var(--green);color:var(--surface)}
+.pending-actions .reject{background:var(--red-bg);color:var(--red)}
+.pending-actions button:hover{opacity:.85}
+.scan-cam{width:100%;aspect-ratio:1;border:2px dashed var(--border-2);border-radius:var(--radius-lg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:var(--surface-2);margin:20px 0;position:relative;overflow:hidden}
+.scan-cam svg{width:64px;height:64px;color:var(--text-3)}
+.scan-cam p{color:var(--text-2);font-size:14px}
+.scan-cafes{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.scan-cafe-btn{padding:14px 16px;border-radius:var(--radius-md);border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;gap:12px;cursor:pointer;transition:all var(--t);text-align:left;width:100%}
+.scan-cafe-btn:hover{border-color:var(--accent);background:var(--accent-bg)}
+.scan-cafe-btn .cafe-av{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
+
+
+/* ==================== MOBILE RESPONSIVE ==================== */
+
+/* Base layout fixes */
+html,body{height:100%}
+body{min-height:100dvh;overflow-y:auto}
+
+/* App shell - mobile scrolling */
+.app-shell{position:fixed;inset:0;overflow:hidden}
+@media(max-width:767px){
+  .app-shell{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+}
+
+/* Customer app */
+.cust-app{max-width:100%;width:100%;min-height:100dvh}
+.cust-scr{min-height:100dvh;padding-bottom:100px}
+
+/* Cafe & Admin shells */
+.cafe-shell,.admin-shell{flex-direction:column;min-height:100dvh}
+
+/* Sidebars - mobile drawer style */
+.cafe-sidebar,.admin-sidebar{
+  width:100%;max-width:100%;flex-direction:row;flex-wrap:wrap;
+  padding:12px 16px;border-right:none;border-bottom:1px solid var(--border);
+  gap:8px;align-items:center;justify-content:space-between;
+}
+.admin-sidebar{color:var(--text);background:var(--surface);border-bottom:1px solid var(--border)}
+
+/* Sidebar logo */
+.cafe-sidebar .logo,.admin-sidebar .logo{margin-bottom:0}
+.cafe-sidebar .logo-txt,.admin-sidebar .logo-txt{display:none}
+
+/* Nav buttons - horizontal scroll */
+.cafe-nav,.admin-nav{
+  flex-direction:row;flex-wrap:nowrap;overflow-x:auto;gap:4px;
+  padding:0;width:auto;flex:1;scrollbar-width:none;-ms-overflow-style:none;
+}
+.cafe-nav::-webkit-scrollbar,.admin-nav::-webkit-scrollbar{display:none}
+
+.cafe-nav-btn,.admin-nav-btn{
+  flex:0 0 auto;white-space:nowrap;padding:8px 12px;font-size:13px;
+  border-radius:var(--radius-md);
+}
+.cafe-nav-btn.on,.admin-nav-btn.on{background:var(--accent-bg);color:var(--accent)}
+.admin-nav-btn.on{background:rgba(255,255,255,.15);color:var(--surface)}
+
+/* Main content areas */
+.cafe-main,.admin-main{padding:16px;overflow:visible}
+
+/* Stats grid - responsive */
+.stats-grid{grid-template-columns:repeat(2,1fr)!important}
+
+/* Cards */
+.card{padding:16px}
+
+/* Tables */
+.table-wrap{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{min-width:600px}
+
+/* Landing page */
+.landing-content{padding:24px}
+.landing-hero h1{font-size:36px}
+.landing-hero p{font-size:16px}
+
+/* Role selector */
+.role-grid{grid-template-columns:1fr}
+
+/* QR scanner */
+.scan-box{height:200px}
+
+/* Cafe top bar */
+.cafe-top{flex-direction:column;align-items:flex-start;gap:8px}
+
+/* Stamp grid */
+.stamp-grid{grid-template-columns:repeat(5,1fr)}
+
+/* Customer switcher in profile */
+#customer-switcher .cafe-card-row{padding:10px}
+
+/* Admin overview stats clickable areas */
+#admin-overview .stat-box{padding:16px}
+
+/* Fix fixed elements on mobile */
+.cust-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:8px 0 24px}
+
+/* ==================== TABLET & UP ==================== */
+@media(min-width:768px){
+  .cafe-shell,.admin-shell{flex-direction:row;height:100%}
+  .cafe-sidebar,.admin-sidebar{
+    width:240px;flex-direction:column;padding:20px 0;
+    border-right:1px solid var(--border);border-bottom:none;
+  }
+  .admin-sidebar{width:260px;background:var(--text);color:var(--surface)}
+  .cafe-sidebar .logo-txt,.admin-sidebar .logo-txt{display:inline}
+  .cafe-nav,.admin-nav{flex-direction:column;overflow:visible;padding:0 12px;flex:none}
+  .cafe-nav-btn,.admin-nav-btn{flex:none;width:100%;justify-content:flex-start}
+  .cafe-main,.admin-main{padding:28px 32px;overflow-y:auto}
+  .stats-grid{grid-template-columns:repeat(4,1fr)!important}
+  .cust-app{max-width:420px;margin:0 auto}
+  .landing-hero h1{font-size:48px}
+  .role-grid{grid-template-columns:repeat(3,1fr)}
+  .scan-box{height:280px}
+  .cafe-top{flex-direction:row;align-items:center}
+  .stamp-grid{grid-template-columns:repeat(10,1fr)}
+}
+
+/* ==================== SMALL PHONES ==================== */
+@media(max-width:380px){
+  .stats-grid{grid-template-columns:1fr 1fr!important;gap:8px}
+  .stats-grid .stat-box{padding:12px}
+  .stats-grid .num{font-size:22px}
+  .card{padding:12px}
+  .cafe-main,.admin-main{padding:12px}
+  .landing-hero h1{font-size:28px}
+  .btn{padding:10px 14px;font-size:13px}
+  .cust-nav-btn{font-size:11px}
+  .cafe-nav-btn,.admin-nav-btn{padding:6px 10px;font-size:12px}
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- ==================== LANDING PAGE ==================== -->
+<div id="landing-page">
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="logo"><div class="logo-mark" style="display:flex;align-items:center;justify-content:center"><svg width="100%" height="100%" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px">
+  <!-- Outer stamp ring with dotted texture -->
+  <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="2 2"/>
+  <circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <!-- Coffee cup -->
+  <path d="M10 14h8v6a4 4 0 0 1-8 0v-6z" fill="currentColor" opacity="0.9"/>
+  <path d="M18 15.5c1.5 0 2.5 1 2.5 2.5s-1 2.5-2.5 2.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Steam lines -->
+  <path d="M12 10c0-1 .5-1.5.5-2.5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M16 10c0-1.2.6-1.8.6-2.8" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M14 9.5c0-.8.4-1.2.4-2" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <!-- Small decorative dots (stamp texture) -->
+  <circle cx="16" cy="4" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="16" cy="28" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="4" cy="16" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="28" cy="16" r="0.8" fill="currentColor" opacity="0.6"/>
+</svg></div>Punch Card</a>
+      <div class="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#settlement">Settlement</a>
+        <button class="nav-cta" onclick="enterApp()">Launch demo</button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/></svg>
+        Cross-café loyalty network for coffee shops
+      </div>
+
+      <h1>Earn stamps anywhere.<br>Redeem free coffee everywhere.</h1>
+      <p>The first digital loyalty card that works across independent coffee shops. No app download. No subscription fees.</p>
+      <div class="hero-btns">
+        <button class="btn btn-pri btn-lg" onclick="enterApp()">Try the demo</button>
+        <button class="btn btn-sec btn-lg" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See how it works</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how-it-works" style="background:var(--surface);border-top:1px solid var(--border)">
+    <div class="container">
+      <div class="c mb-24">
+        <h2 class="text-3xl font-700 tracking-tight mb-8">How it works</h2>
+        <p class="text-lg text-2">Three simple steps to join the network</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+        <div class="card card-hover">
+          <div class="cafe-av" style="background:var(--accent-bg);color:var(--accent);margin-bottom:16px">1</div>
+          <h3 class="text-lg font-600 mb-8">Join the network</h3>
+          <p class="text-sm text-2">Cafés sign up, set their reward, and get a unique QR code. Customers to scan — no app download needed.</p>
+        </div>
+        <div class="card card-hover">
+          <div class="cafe-av" style="background:var(--blue-bg);color:var(--blue);margin-bottom:16px">2</div>
+          <h3 class="text-lg font-600 mb-8">Earn anywhere</h3>
+          <p class="text-sm text-2">Buy coffee at any participating café. Stamps accumulate in one shared wallet, no matter where you earn them.</p>
+        </div>
+        <div class="card card-hover">
+          <div class="cafe-av" style="background:var(--green-bg);color:var(--green-2);margin-bottom:16px">3</div>
+          <h3 class="text-lg font-600 mb-8">Redeem anywhere</h3>
+          <p class="text-sm text-2">Hit 10 stamps? Choose any café in the network for your free coffee. We handle the settlement automatically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="settlement">
+    <div class="container">
+      <div class="c mb-24">
+        <h2 class="text-3xl font-700 tracking-tight mb-8">Automatic settlement</h2>
+        <p class="text-lg text-2">When a customer redeems at a different café, we calculate exactly who owes what</p>
+      </div>
+      <div class="card" style="max-width:720px;margin:0 auto">
+        <div class="c mb-16">
+          <span class="badge badge-amber">Example scenario</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center;margin-bottom:24px">
+          <div class="card-2 c">
+            <div class="cafe-av" style="background:var(--blue-bg);color:var(--blue);margin:0 auto 8px">A</div>
+            <p class="text-sm font-600">Café A</p>
+            <p class="text-xs text-2">5 stamps issued</p>
+          </div>
+          <div class="text-3">+</div>
+          <div class="card-2 c">
+            <div class="cafe-av" style="background:var(--purple-bg);color:var(--purple);margin:0 auto 8px">B</div>
+            <p class="text-sm font-600">Café B</p>
+            <p class="text-xs text-2">5 stamps issued</p>
+          </div>
+          <div class="text-3">=</div>
+          <div class="card-2 c" style="border-color:var(--green);background:var(--green-bg)">
+            <div class="cafe-av" style="background:var(--green);color:var(--surface);margin:0 auto 8px">R</div>
+            <p class="text-sm font-600">Reward</p>
+            <p class="text-xs text-2">1 free coffee</p>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:20px">
+          <p class="text-sm font-600 mb-12">Settlement breakdown ($30.00 value)</p>
+          <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+            <div class="stat-box"><div class="num" style="color:var(--red)">-$15.00</div><div class="lbl">Café A owes</div></div>
+            <div class="stat-box"><div class="num" style="color:var(--red)">-$15.00</div><div class="lbl">Café B owes</div></div>
+            <div class="stat-box"><div class="num" style="color:var(--green)">+$30.00</div><div class="lbl">Café C receives</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="features" style="background:var(--surface);border-top:1px solid var(--border)">
+    <div class="container">
+      <div class="c mb-24">
+        <h2 class="text-3xl font-700 tracking-tight mb-8">Built for independents</h2>
+        <p class="text-lg text-2">Everything you need to run a shared loyalty network</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div class="card card-hover">
+          <div class="cafe-av" style="background:var(--bg-2);color:var(--text);margin-bottom:12px;width:40px;height:40px;font-size:16px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-base font-600 mb-4">No app downloads</h3>
+          <p class="text-sm text-2">Customers use their phone browser. No friction, no app store, no updates.</p>
+        </div>
+        <div class="card card-hover">
+          <div class="cafe-av" style="background:var(--bg-2);color:var(--text);margin-bottom:12px;width:40px;height:40px;font-size:16px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-base font-600 mb-4">Cross-café settlement</h3>
+          <p class="text-sm text-2">We track every stamp origin and automatically calculate who owes what when rewards are redeemed.</p>
+        </div>
+        <div class="card card-hover">
+          <div class="cafe-av" style="background:var(--bg-2);color:var(--text);margin-bottom:12px;width:40px;height:40px;font-size:16px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm2 12H6l-2 2V4h16v10z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-base font-600 mb-4">Fraud protection</h3>
+          <p class="text-sm text-2">Staff authentication, rate limiting, and immutable audit logs prevent fake stamps and duplicate rewards.</p>
+        </div>
+        <div class="card card-hover">
+          <div class="cafe-av" style="background:var(--bg-2);color:var(--text);margin-bottom:12px;width:40px;height:40px;font-size:16px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-base font-600 mb-4">Financial ledger</h3>
+          <p class="text-sm text-2">Every transaction is recorded immutably. Corrections create reversal entries, never deletions.</p>
+        </div>
+        <div class="card card-hover">
+          <div class="cafe-av" style="background:var(--bg-2);color:var(--text);margin-bottom:12px;width:40px;height:40px;font-size:16px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm2 12H6l-2 2V4h16v10z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-base font-600 mb-4">Multilingual ready</h3>
+          <p class="text-sm text-2">Built for English now, with architecture ready for Traditional Chinese and Simplified Chinese.</p>
+        </div>
+        <div class="card card-hover">
+          <div class="cafe-av" style="background:var(--bg-2);color:var(--text);margin-bottom:12px;width:40px;height:40px;font-size:16px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-base font-600 mb-4">Works on any device</h3>
+          <p class="text-sm text-2">Customers use their phone. Café owners use phone, tablet, or laptop. No special hardware needed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="text-align:center">
+    <div class="container">
+      <h2 class="text-3xl font-700 tracking-tight mb-8">Ready to try Punch Card?</h2>
+      <p class="text-lg text-2 max-w-md mx-auto mb-24">Launch the interactive demo to experience the customer app, café dashboard, and settlement engine.</p>
+      <button class="btn btn-pri btn-lg" onclick="enterApp()">Launch interactive demo</button>
+    </div>
+  </section>
+
+  <footer style="border-top:1px solid var(--border);padding:40px 0;text-align:center">
+    <div class="container">
+      <p class="text-sm text-3">Punch Card — Cross-café loyalty network for independent coffee shops</p>
+      <p class="text-xs text-4 mt-4">Built for demo purposes. All data is local to your browser.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ==================== APP SHELL ==================== -->
+<div id="app-shell" class="app-shell hide">
+  <!-- Role selector -->
+  <div id="role-select" class="h-full flex flex-col items-center justify-center p-24" style="background:var(--bg)">
+    <div class="c mb-32">
+      <div class="logo-mark mx-auto mb-16" style="width:56px;height:56px;font-size:20px;border-radius:14px"><svg width="100%" height="100%" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px">
+  <!-- Outer stamp ring with dotted texture -->
+  <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="2 2"/>
+  <circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <!-- Coffee cup -->
+  <path d="M10 14h8v6a4 4 0 0 1-8 0v-6z" fill="currentColor" opacity="0.9"/>
+  <path d="M18 15.5c1.5 0 2.5 1 2.5 2.5s-1 2.5-2.5 2.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Steam lines -->
+  <path d="M12 10c0-1 .5-1.5.5-2.5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M16 10c0-1.2.6-1.8.6-2.8" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M14 9.5c0-.8.4-1.2.4-2" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <!-- Small decorative dots (stamp texture) -->
+  <circle cx="16" cy="4" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="16" cy="28" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="4" cy="16" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="28" cy="16" r="0.8" fill="currentColor" opacity="0.6"/>
+</svg></div>
+      <h1 class="text-3xl font-700 tracking-tight mb-8">Punch Card</h1>
+      <p class="text-base text-2">Choose your perspective to explore the demo</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:640px;width:100%">
+      <button class="card card-hover p-24 flex flex-col items-center gap-12" onclick="setRole('customer')">
+        <div class="cafe-av" style="background:var(--blue-bg);color:var(--blue);width:56px;height:56px;font-size:24px">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/></svg>
+        </div>
+        <div class="c">
+          <h3 class="text-lg font-600">Customer</h3>
+          <p class="text-sm text-2 mt-4">Join, earn stamps, redeem rewards</p>
+        </div>
+      </button>
+      <button class="card card-hover p-24 flex flex-col items-center gap-12" onclick="setRole('cafe')">
+        <div class="cafe-av" style="background:var(--accent-bg);color:var(--accent);width:56px;height:56px;font-size:24px">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" fill="currentColor"/></svg>
+        </div>
+        <div class="c">
+          <h3 class="text-lg font-600">Café Owner</h3>
+          <p class="text-sm text-2 mt-4">Dashboard, scan, settlements</p>
+        </div>
+      </button>
+      <button class="card card-hover p-24 flex flex-col items-center gap-12" onclick="setRole('admin')">
+        <div class="cafe-av" style="background:var(--purple-bg);color:var(--purple);width:56px;height:56px;font-size:24px">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" fill="currentColor"/></svg>
+        </div>
+        <div class="c">
+          <h3 class="text-lg font-600">Admin</h3>
+          <p class="text-sm text-2 mt-4">Network overview & settlements</p>
+        </div>
+      </button>
+    </div>
+    <button class="btn btn-sec btn-sm mt-32" onclick="exitApp()">← Back to previous page</button>
+  </div>
+
+  <!-- ==================== CUSTOMER APP ==================== -->
+  <div id="customer-app" class="cust-app hide">
+    <div style="padding:10px 20px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:space-between;z-index:10">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--text)">
+          <svg viewBox="0 0 32 32" fill="none" style="width:20px;height:20px"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="2 2"/><circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M10 14h8v6a4 4 0 0 1-8 0v-6z" fill="currentColor" opacity="0.9"/><path d="M18 15.5c1.5 0 2.5 1 2.5 2.5s-1 2.5-2.5 2.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M12 10c0-1 .5-1.5.5-2.5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/><path d="M16 10c0-1.2.6-1.8.6-2.8" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/></svg>
+        </div>
+        <span style="font-size:13px;font-weight:600;color:var(--text)">Punch Card</span>
+      </div>
+      <button onclick="backToRoleSelect()" style="font-size:12px;color:var(--text-2);background:transparent;border:none;display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:6px;transition:background var(--t)" onmouseover="this.style.background='var(--bg-2)'" onmouseout="this.style.background='transparent'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor"/></svg>
+        Back to previous page
+      </button>
+    </div>
+    <div class="app-body" id="cust-body">
+      <!-- Home / Wallet -->
+      <div class="cust-scr on" id="cust-home">
+        <div class="flex justify-between items-center mb-16">
+          <div>
+            <p class="text-xs text-3 mb-4">Punch Card</p>
+            <h2 class="text-2xl font-700 tracking-tight">My wallet</h2>
+          </div>
+          <div class="cafe-av" style="background:var(--bg-2);color:var(--text);width:40px;height:40px;font-size:14px" id="cust-avatar">A</div>
+        </div>
+        <div class="wallet-card mb-16">
+          <div class="wallet-card-header">
+            <span class="wallet-card-title">Punch Card</span>
+            <span class="wallet-card-cafes" id="wallet-cafes">3 cafés</span>
+          </div>
+          <div id="wallet-stamps-container"></div>
+          <div class="wallet-progress">
+            <div class="wallet-progress-bar" id="wallet-progress-bar" style="width:0%"></div>
+          </div>
+          <div class="wallet-footer">
+            <span class="wallet-reward-text">Reward: 1 free coffee</span>
+            <span class="wallet-reward-status" id="wallet-status">Collecting stamps...</span>
+          </div>
+        </div>
+        <h3 class="text-base font-600 mb-12">Participating cafés</h3>
+        <div id="cafe-list"></div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- Café Detail -->
+      <div class="cust-scr" id="cust-cafe">
+        <div class="cust-head">
+          <button class="cust-back" onclick="goCust('home')"><svg viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg></button>
+          <h2>Café detail</h2>
+        </div>
+        <div id="cust-cafe-body"></div>
+      </div>
+
+      <!-- Show QR -->
+      <div class="cust-scr" id="cust-qr">
+        <div class="cust-head">
+          <button class="cust-back" onclick="goCust('home')"><svg viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg></button>
+          <h2>Your code</h2>
+        </div>
+        <div class="c p-24">
+          <p class="text-sm text-2 mb-16">Show this to café staff</p>
+          <div class="qr-box qr-lg" id="cust-qr-box"></div>
+          <p class="text-xs text-3 mt-16">Scan to add stamp or verify reward</p>
+          <button class="btn btn-sec w-full mt-24" onclick="simStamp()">Simulate stamp (demo)</button>
+        </div>
+      </div>
+
+      <!-- Stamp Added -->
+      <div class="cust-scr" id="cust-stamp-ok">
+        <div class="cust-head">
+          <button class="cust-back" onclick="goCust('home')"><svg viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg></button>
+          <h2>Stamp added</h2>
+        </div>
+        <div class="c p-24">
+          <div class="pop" style="width:80px;height:80px;border-radius:50%;background:var(--green);color:var(--surface);display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-xl font-700 mb-8">Stamp added!</h3>
+          <p class="text-sm text-2 mb-16" id="stamp-ok-msg"></p>
+          <div class="stamp-grid" id="stamp-ok-grid"></div>
+          <button class="btn btn-pri w-full" onclick="goCust('home');renderWallet()">Continue</button>
+        </div>
+      </div>
+
+      <!-- Customer Scan -->
+      <div class="cust-scr" id="cust-scan">
+        <div class="cust-head">
+          <button class="cust-back" onclick="goCust('home')"><svg viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg></button>
+          <h2>Scan café</h2>
+        </div>
+        <div class="p-24">
+          <p class="text-sm text-2 c mb-16">Point your camera at a café QR code or select a café below</p>
+          <div class="scan-cam">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" fill="currentColor"/></svg>
+            <p>Camera would open here</p>
+            <p class="text-xs text-3">(Demo mode — select a café below)</p>
+          </div>
+          <h3 class="text-base font-600 mb-12">Or select a café</h3>
+          <div class="scan-cafes" id="scan-cafe-list"></div>
+        </div>
+      </div>
+
+      <!-- Customer Scan Result -->
+      <div class="cust-scr" id="cust-scan-ok">
+        <div class="cust-head">
+          <button class="cust-back" onclick="goCust('home')"><svg viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg></button>
+          <h2>Request sent</h2>
+        </div>
+        <div class="c p-24">
+          <div class="pop" style="width:72px;height:72px;border-radius:50%;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-lg font-700 mb-8">Stamp request sent!</h3>
+          <p class="text-sm text-2 mb-16" id="scan-ok-msg"></p>
+          <p class="text-sm text-2">Waiting for café staff to approve...</p>
+          <button class="btn btn-pri w-full mt-24" onclick="goCust('home');renderWallet()">Back to wallet</button>
+        </div>
+      </div>
+
+      <!-- Reward Ready -->
+      <div class="cust-scr" id="cust-reward">
+        <div class="cust-head">
+          <button class="cust-back" onclick="goCust('home')"><svg viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg></button>
+          <h2>Reward ready</h2>
+        </div>
+        <div class="c p-24">
+          <div class="pop" style="width:80px;height:80px;border-radius:50%;background:var(--accent);color:var(--surface);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 4px 20px rgba(194,94,0,.3)">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-xl font-700 mb-8">Free coffee earned!</h3>
+          <p class="text-sm text-2 mb-8">You have collected 10 stamps across the network</p>
+          <div class="card mb-16" style="background:var(--accent-bg);border-color:var(--accent)">
+            <p class="text-sm font-600 mb-12">Choose where to redeem</p>
+            <div id="redeem-cafes"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Redeem Success -->
+      <div class="cust-scr" id="cust-redeem-ok">
+        <div class="cust-head">
+          <button class="cust-back" onclick="goCust('home');renderWallet()"><svg viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg></button>
+          <h2>Redeemed</h2>
+        </div>
+        <div class="c p-24">
+          <div class="pop" style="width:80px;height:80px;border-radius:50%;background:var(--green);color:var(--surface);display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg>
+          </div>
+          <h3 class="text-xl font-700 mb-8">Enjoy your coffee!</h3>
+          <p class="text-sm text-2 mb-16" id="redeem-ok-msg"></p>
+          <div class="card mb-16" style="background:var(--green-bg);border-color:var(--green)">
+            <p class="text-sm font-600 mb-8">Settlement recorded</p>
+            <div id="redeem-settlement" class="text-sm text-2"></div>
+          </div>
+          <button class="btn btn-pri w-full" onclick="goCust('home');renderWallet()">Back to wallet</button>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div class="cust-scr" id="cust-profile">
+        <p class="text-xs text-3 mb-8" style="margin-top:28px">Punch Card</p>
+        <h2 class="text-2xl font-700 tracking-tight mb-16">Profile</h2>
+        <div class="c mb-24">
+          <div class="cafe-av" style="background:var(--bg-2);color:var(--text);width:72px;height:72px;font-size:28px;margin:0 auto 12px" id="prof-avatar">A</div>
+          <h3 class="text-lg font-600" id="prof-name">Alex Chen</h3>
+          <p class="text-sm text-2" id="prof-email">alex@email.com</p>
+          <p class="text-sm text-2 mt-4" id="prof-phone">+852 9123 4567</p>
+        </div>
+        <div class="card mb-12">
+          <div class="flex justify-between items-center mb-8"><span class="text-sm text-2">Total stamps collected</span><span class="text-base font-600" id="prof-stamps">0</span></div>
+          <div class="flex justify-between items-center mb-8"><span class="text-sm text-2">Rewards redeemed</span><span class="text-base font-600" id="prof-rewards">0</span></div>
+          <div class="flex justify-between items-center"><span class="text-sm text-2">Cafés visited</span><span class="text-base font-600" id="prof-cafes">0</span></div>
+        </div>
+        <h3 class="text-base font-600 mb-12">Switch customer (demo)</h3>
+        <div id="customer-switcher" class="mb-16"></div>
+        <h3 class="text-base font-600 mb-12">Stamp history</h3>
+        <div id="prof-history"></div>
+        <div style="height:80px"></div>
+      </div>
+
+      <!-- History Detail -->
+      <div class="cust-scr" id="cust-history">
+        <div class="cust-head">
+          <button class="cust-back" onclick="goCust('profile')"><svg viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg></button>
+          <h2>Transaction</h2>
+        </div>
+        <div id="cust-history-body"></div>
+      </div>
+    </div>
+    <div class="cust-tabbar">
+      <button class="cust-tab on" onclick="goCust('home');setCustTab(0)">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" fill="currentColor"/></svg>
+        <span>Wallet</span>
+      </button>
+      <button class="cust-tab" onclick="goCust('scan');setCustTab(1)">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" fill="currentColor"/></svg>
+        <span>Scan</span>
+      </button>
+      <button class="cust-tab" onclick="goCust('profile');setCustTab(2)">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/></svg>
+        <span>Profile</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== CAFE DASHBOARD ==================== -->
+  <div id="cafe-app" class="cafe-shell hide">
+    <div class="cafe-sidebar">
+      <div class="logo" style="font-size:16px"><div class="logo-mark" style="display:flex;align-items:center;justify-content:center"><svg width="100%" height="100%" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px">
+  <!-- Outer stamp ring with dotted texture -->
+  <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="2 2"/>
+  <circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <!-- Coffee cup -->
+  <path d="M10 14h8v6a4 4 0 0 1-8 0v-6z" fill="currentColor" opacity="0.9"/>
+  <path d="M18 15.5c1.5 0 2.5 1 2.5 2.5s-1 2.5-2.5 2.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Steam lines -->
+  <path d="M12 10c0-1 .5-1.5.5-2.5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M16 10c0-1.2.6-1.8.6-2.8" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M14 9.5c0-.8.4-1.2.4-2" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <!-- Small decorative dots (stamp texture) -->
+  <circle cx="16" cy="4" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="16" cy="28" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="4" cy="16" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="28" cy="16" r="0.8" fill="currentColor" opacity="0.6"/>
+</svg></div>Punch Card</div>
+      <div class="cafe-nav">
+        <button class="cafe-nav-btn on" onclick="goCafe('dash')" id="nav-dash">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" fill="currentColor"/></svg>
+          Dashboard
+        </button>
+        <button class="cafe-nav-btn" onclick="goCafe('scan')" id="nav-scan">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" fill="currentColor"/></svg>
+          Scan Customer
+        </button>
+        <button class="cafe-nav-btn" onclick="goCafe('customers')" id="nav-customers">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" fill="currentColor"/></svg>
+          Customers
+        </button>
+        <button class="cafe-nav-btn" onclick="goCafe('financials')" id="nav-financials">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" fill="currentColor"/></svg>
+          Financials
+        </button>
+        <button class="cafe-nav-btn" onclick="goCafe('settings')" id="nav-settings">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.27.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="currentColor"/></svg>
+          Settings
+        </button>
+      </div>
+      <div style="margin-top:auto;padding:16px;border-top:1px solid var(--border)">
+        <button class="cafe-nav-btn" onclick="exitApp()">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor"/></svg>
+          Exit demo
+        </button>
+      </div>
+    </div>
+    <div class="cafe-main">
+      <div id="cafe-dash">
+        <div class="cafe-top"><h1>Dashboard</h1><span class="badge badge-green">Active</span></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="backToRoleSelect()" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor"/></svg>
+          Back to previous page
+        </button>
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat-box"><div class="num" id="dash-cust">0</div><div class="lbl">Customers</div></div>
+          <div class="stat-box"><div class="num" id="dash-stamps">0</div><div class="lbl">Stamps issued</div></div>
+          <div class="stat-box"><div class="num" id="dash-rewards">0</div><div class="lbl">Rewards redeemed</div></div>
+          <div class="stat-box"><div class="num" id="dash-balance">$0</div><div class="lbl">Net balance</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div class="card">
+            <h3 class="text-base font-600 mb-12">Quick actions</h3>
+            <button class="btn btn-pri w-full mb-8" onclick="goCafe('scan')">Scan customer</button>
+            <button class="btn btn-outline w-full" onclick="goCafe('customers')">View customers</button>
+          </div>
+          <div class="card">
+            <h3 class="text-base font-600 mb-12">Your QR code</h3>
+            <div class="qr-box" id="cafe-qr-box" style="width:120px;height:120px;margin:0 auto 12px"></div>
+            <p class="text-xs text-3 c">Customers to scan</p>
+          </div>
+        </div>
+        <div class="card mt-20">
+          <h3 class="text-base font-600 mb-12">Pending approvals</h3>
+          <div id="cafe-pending"></div>
+        </div>
+        <div class="card mt-20">
+          <h3 class="text-base font-600 mb-12">Recent activity</h3>
+          <div id="cafe-activity"></div>
+        </div>
+      </div>
+      <div id="cafe-scan" class="hide">
+        <div class="cafe-top"><h1>Scan customer</h1></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="goCafe('dash')" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+          Back to dashboard
+        </button>
+        <div style="max-width:480px;margin:0 auto">
+          <div class="scan-frame" id="scan-frame">
+            <div style="width:160px;height:160px" id="scan-qr"></div>
+            <div class="scan-line"></div>
+          </div>
+          <div class="c">
+            <p class="text-sm text-2 mb-16">Point camera at customer QR code</p>
+            <div class="card mb-16" id="scan-result" style="display:none">
+              <div class="flex items-center gap-12 mb-12">
+                <div class="cafe-av" style="background:var(--blue-bg);color:var(--blue);width:44px;height:44px;font-size:16px" id="scan-avatar">A</div>
+                <div>
+                  <p class="font-600" id="scan-name">Alex Chen</p>
+                  <p class="text-sm text-2" id="scan-wallet">0/10 stamps</p>
+                </div>
+              </div>
+              <div class="flex gap-8">
+                <button class="btn btn-pri flex-1" onclick="cafeAddStamp()">Add stamp</button>
+                <button class="btn btn-outline flex-1" onclick="cafeVerifyReward()">Verify reward</button>
+              </div>
+            </div>
+            <button class="btn btn-sec w-full" onclick="simScanCustomer()">Simulate scan (demo)</button>
+          </div>
+        </div>
+      </div>
+      <div id="cafe-customers" class="hide">
+        <div class="cafe-top"><h1>Customers</h1></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="goCafe('dash')" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor"/></svg>
+          Back to previous page
+        </button>
+        <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Stamps</th><th>Rewards</th><th>Last visit</th></tr></thead><tbody id="cafe-cust-table"></tbody></table></div>
+      </div>
+      <div id="cafe-financials" class="hide">
+        <div class="cafe-top"><h1>Financials</h1></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="goCafe('dash')" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor"/></svg>
+          Back to previous page
+        </button>
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat-box"><div class="num text-2" id="fin-owed">$0</div><div class="lbl">Amount owed</div></div>
+          <div class="stat-box"><div class="num" style="color:var(--green)" id="fin-earned">$0</div><div class="lbl">Amount earned</div></div>
+          <div class="stat-box"><div class="num" id="fin-net">$0</div><div class="lbl">Net balance</div></div>
+        </div>
+        <div class="card">
+          <h3 class="text-base font-600 mb-12">Settlement ledger</h3>
+          <div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Details</th><th>Amount</th><th>Status</th></tr></thead><tbody id="cafe-ledger"></tbody></table></div>
+        </div>
+      </div>
+      <div id="cafe-settings" class="hide">
+        <div class="cafe-top"><h1>Settings</h1></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="goCafe('dash')" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor"/></svg>
+          Back to previous page
+        </button>
+        <div style="max-width:520px">
+          <div class="card mb-16">
+            <h3 class="text-base font-600 mb-12">Loyalty program</h3>
+            <div class="fld"><label>Stamps required</label><select id="set-stamps"><option>10</option><option>8</option><option>6</option><option>5</option></select></div>
+            <div class="fld"><label>Reward</label><input value="1 free coffee" id="set-reward"></div>
+            <div class="fld"><label>Settlement value ($)</label><input type="number" value="30.00" id="set-value" step="0.01"></div>
+            <button class="btn btn-pri w-full" onclick="saveSettings()">Save changes</button>
+          </div>
+          <div class="card">
+            <h3 class="text-base font-600 mb-12">Staff accounts</h3>
+            <div id="staff-list"></div>
+            <button class="btn btn-outline w-full mt-12" onclick="addStaff()">+ Add staff</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN PANEL ==================== -->
+  <div id="admin-app" class="admin-shell hide">
+    <div class="admin-sidebar">
+      <div class="logo"><div class="logo-mark" style="display:flex;align-items:center;justify-content:center"><svg width="100%" height="100%" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px">
+  <!-- Outer stamp ring with dotted texture -->
+  <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="2 2"/>
+  <circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <!-- Coffee cup -->
+  <path d="M10 14h8v6a4 4 0 0 1-8 0v-6z" fill="currentColor" opacity="0.9"/>
+  <path d="M18 15.5c1.5 0 2.5 1 2.5 2.5s-1 2.5-2.5 2.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Steam lines -->
+  <path d="M12 10c0-1 .5-1.5.5-2.5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M16 10c0-1.2.6-1.8.6-2.8" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M14 9.5c0-.8.4-1.2.4-2" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <!-- Small decorative dots (stamp texture) -->
+  <circle cx="16" cy="4" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="16" cy="28" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="4" cy="16" r="0.8" fill="currentColor" opacity="0.6"/>
+  <circle cx="28" cy="16" r="0.8" fill="currentColor" opacity="0.6"/>
+</svg></div>Punch Card</div>
+      <div class="admin-nav">
+        <button class="admin-nav-btn on" onclick="goAdmin('overview')" id="adm-nav-overview">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" fill="currentColor"/></svg>
+          Network Overview
+        </button>
+        <button class="admin-nav-btn" onclick="goAdmin('cafes')" id="adm-nav-cafes">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" fill="currentColor"/></svg>
+          Cafés
+        </button>
+        <button class="admin-nav-btn" onclick="goAdmin('customers')" id="adm-nav-customers">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" fill="currentColor"/></svg>
+          Customers
+        </button>
+        <button class="admin-nav-btn" onclick="goAdmin('stamps')" id="adm-nav-stamps">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/></svg>
+          Stamps
+        </button>
+        <button class="admin-nav-btn" onclick="goAdmin('rewards')" id="adm-nav-rewards">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/></svg>
+          Rewards
+        </button>
+        <button class="admin-nav-btn" onclick="goAdmin('settlements')" id="adm-nav-settlements">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" fill="currentColor"/></svg>
+          Settlements
+        </button>
+        <button class="admin-nav-btn" onclick="goAdmin('ledger')" id="adm-nav-ledger">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm2 12H6l-2 2V4h16v10z" fill="currentColor"/></svg>
+          Ledger
+        </button>
+      </div>
+      <div style="margin-top:auto;padding:20px;border-top:1px solid rgba(255,255,255,.1)">
+        <button class="admin-nav-btn" onclick="exitApp()">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor"/></svg>
+          Exit demo
+        </button>
+      </div>
+    </div>
+    <div class="admin-main">
+      <div id="admin-overview">
+        <div class="cafe-top"><h1>Network Overview</h1><span class="badge badge-green">Live</span></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="backToRoleSelect()" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" fill="currentColor"/></svg>
+          Back to previous page
+        </button>
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat-box" style="cursor:pointer" onclick="goAdmin('cafes');document.getElementById('adm-nav-cafes').click()" title="View all cafés">
+            <div class="num" id="adm-cafes">0</div>
+            <div class="lbl">Participating cafés</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--accent)">View all →</div>
+          </div>
+          <div class="stat-box" style="cursor:pointer" onclick="goAdmin('customers');document.getElementById('adm-nav-customers').click()" title="View all customers">
+            <div class="num" id="adm-cust">0</div>
+            <div class="lbl">Active customers</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--accent)">View all →</div>
+          </div>
+          <div class="stat-box" style="cursor:pointer" onclick="goAdmin('stamps')" title="View all stamps">
+            <div class="num" id="adm-stamps">0</div>
+            <div class="lbl">Stamps issued</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--accent)">View all →</div>
+          </div>
+          <div class="stat-box" style="cursor:pointer" onclick="goAdmin('rewards')" title="View all rewards">
+            <div class="num" id="adm-rewards">0</div>
+            <div class="lbl">Rewards redeemed</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--accent)">View all →</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div class="card">
+            <h3 class="text-base font-600 mb-12">Network financials</h3>
+            <div class="stats-grid" style="grid-template-columns:1fr 1fr">
+              <div class="stat-box" style="background:var(--red-bg);border-color:var(--red)"><div class="num" style="color:var(--red);font-size:24px" id="adm-liab">$0</div><div class="lbl">Merchant liabilities</div></div>
+              <div class="stat-box" style="background:var(--green-bg);border-color:var(--green)"><div class="num" style="color:var(--green-2);font-size:24px" id="adm-cred">$0</div><div class="lbl">Merchant credits</div></div>
+            </div>
+            <div class="mt-12">
+              <div class="flex justify-between items-center mb-8"><span class="text-sm text-2">Pending settlements</span><span class="text-base font-600" id="adm-pending">$0</span></div>
+              <div class="flex justify-between items-center"><span class="text-sm text-2">Completed settlements</span><span class="text-base font-600" id="adm-completed">$0</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="text-base font-600 mb-12">Recent network activity</h3>
+            <div id="admin-activity"></div>
+          </div>
+        </div>
+      </div>
+      <div id="admin-cafes" class="hide">
+        <div class="cafe-top"><h1>Participating Cafés</h1></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="goAdmin('overview')" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+          Back to previous page
+        </button>
+        <div class="table-wrap"><table><thead><tr><th>Café</th><th>Stamps Issued</th><th>Rewards Redeemed</th><th>Net Balance</th><th>Status</th></tr></thead><tbody id="admin-cafe-table"></tbody></table></div>
+      </div>
+      <div id="admin-customers" class="hide">
+        <div class="cafe-top"><h1>Customers</h1></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="goAdmin('overview')" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+          Back to previous page
+        </button>
+        <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Stamps</th><th>Rewards</th><th>Cafés Visited</th><th>Joined</th></tr></thead><tbody id="admin-cust-table"></tbody></table></div>
+      </div>
+      <div id="admin-settlements" class="hide">
+        <div class="cafe-top"><h1>Settlement Batches</h1></div>
+        <div class="card mb-16">
+          <h3 class="text-base font-600 mb-12">Settlement calculator</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+            <div class="fld"><label>Café A stamps</label><input type="number" id="calc-a" value="5" onchange="updateCalc()"></div>
+            <div class="fld"><label>Café B stamps</label><input type="number" id="calc-b" value="5" onchange="updateCalc()"></div>
+            <div class="fld"><label>Settlement value ($)</label><input type="number" id="calc-val" value="5" step="0.01" onchange="updateCalc()"></div>
+          </div>
+          <div class="card-2 mt-16" style="background:var(--bg-2)">
+            <div class="flex justify-between items-center mb-8"><span class="text-sm">Café A owes</span><span class="text-lg font-600" style="color:var(--red)" id="calc-res-a">$2.50</span></div>
+            <div class="flex justify-between items-center mb-8"><span class="text-sm">Café B owes</span><span class="text-lg font-600" style="color:var(--red)" id="calc-res-b">$2.50</span></div>
+            <div class="flex justify-between items-center"><span class="text-sm">Redeeming café receives</span><span class="text-lg font-600" style="color:var(--green)" id="calc-res-c">$30.00</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="text-base font-600 mb-12">Recent settlements</h3>
+          <div class="table-wrap"><table><thead><tr><th>ID</th><th>Date</th><th>Customer</th><th>Redeemed At</th><th>Value</th><th>Status</th></tr></thead><tbody id="admin-settle-table"></tbody></table></div>
+        </div>
+      </div>
+      <div id="admin-stamps" class="hide">
+        <div class="cafe-top"><h1>All Stamps</h1></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="goAdmin('overview')" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+          Back to previous page
+        </button>
+        <div class="card">
+          <div class="table-wrap"><table><thead><tr><th>ID</th><th>Date</th><th>Customer</th><th>Café</th><th>Staff</th><th>Status</th></tr></thead><tbody id="admin-stamps-table"></tbody></table></div>
+        </div>
+      </div>
+      <div id="admin-rewards" class="hide">
+        <div class="cafe-top"><h1>All Rewards</h1></div>
+        <button class="btn btn-outline btn-sm mb-16" onclick="goAdmin('overview')" style="display:inline-flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+          Back to previous page
+        </button>
+        <div class="card">
+          <div class="table-wrap"><table><thead><tr><th>ID</th><th>Created</th><th>Customer</th><th>Stamps</th><th>Redeemed At</th><th>Status</th></tr></thead><tbody id="admin-rewards-table"></tbody></table></div>
+        </div>
+      </div>
+      <div id="admin-ledger" class="hide">
+        <div class="cafe-top"><h1>Financial Ledger</h1></div>
+        <div class="card">
+          <div class="table-wrap"><table><thead><tr><th>ID</th><th>Date</th><th>Type</th><th>From</th><th>To</th><th>Amount</th><th>Reward</th><th>Status</th></tr></thead><tbody id="admin-ledger-table"></tbody></table></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== SVG ICONS ====================
+const IC={
+  check:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/></svg>',
+  qr:function(id){return `<svg viewBox="0 0 100 100" style="width:100%;height:100%"><rect x="5" y="5" width="25" height="25" fill="var(--text)"/><rect x="10" y="10" width="15" height="15" fill="var(--surface)"/><rect x="13" y="13" width="9" height="9" fill="var(--text)"/><rect x="70" y="5" width="25" height="25" fill="var(--text)"/><rect x="75" y="10" width="15" height="15" fill="var(--surface)"/><rect x="78" y="13" width="9" height="9" fill="var(--text)"/><rect x="5" y="70" width="25" height="25" fill="var(--text)"/><rect x="10" y="75" width="15" height="15" fill="var(--surface)"/><rect x="13" y="78" width="9" height="9" fill="var(--text)"/><rect x="35" y="8" width="4" height="4" fill="var(--text)"/><rect x="42" y="12" width="4" height="4" fill="var(--text)"/><rect x="50" y="8" width="4" height="4" fill="var(--text)"/><rect x="58" y="16" width="4" height="4" fill="var(--text)"/><rect x="35" y="20" width="4" height="4" fill="var(--text)"/><rect x="46" y="24" width="4" height="4" fill="var(--text)"/><rect x="54" y="20" width="4" height="4" fill="var(--text)"/><rect x="35" y="35" width="4" height="4" fill="var(--text)"/><rect x="43" y="39" width="4" height="4" fill="var(--text)"/><rect x="51" y="35" width="4" height="4" fill="var(--text)"/><rect x="59" y="43" width="4" height="4" fill="var(--text)"/><rect x="35" y="47" width="4" height="4" fill="var(--text)"/><rect x="47" y="43" width="4" height="4" fill="var(--text)"/><rect x="55" y="51" width="4" height="4" fill="var(--text)"/><rect x="8" y="35" width="4" height="4" fill="var(--text)"/><rect x="16" y="43" width="4" height="4" fill="var(--text)"/><rect x="24" y="39" width="4" height="4" fill="var(--text)"/><rect x="8" y="47" width="4" height="4" fill="var(--text)"/><rect x="20" y="51" width="4" height="4" fill="var(--text)"/><rect x="35" y="55" width="4" height="4" fill="var(--text)"/><rect x="43" y="63" width="4" height="4" fill="var(--text)"/><rect x="51" y="59" width="4" height="4" fill="var(--text)"/><rect x="59" y="55" width="4" height="4" fill="var(--text)"/><rect x="35" y="67" width="4" height="4" fill="var(--text)"/><rect x="47" y="63" width="4" height="4" fill="var(--text)"/><rect x="70" y="35" width="4" height="4" fill="var(--text)"/><rect x="78" y="43" width="4" height="4" fill="var(--text)"/><rect x="86" y="39" width="4" height="4" fill="var(--text)"/><rect x="70" y="47" width="4" height="4" fill="var(--text)"/><rect x="82" y="51" width="4" height="4" fill="var(--text)"/><rect x="70" y="55" width="4" height="4" fill="var(--text)"/><rect x="78" y="63" width="4" height="4" fill="var(--text)"/><rect x="86" y="59" width="4" height="4" fill="var(--text)"/><rect x="70" y="67" width="4" height="4" fill="var(--text)"/><rect x="82" y="55" width="4" height="4" fill="var(--text)"/><rect x="35" y="78" width="4" height="4" fill="var(--text)"/><rect x="43" y="82" width="4" height="4" fill="var(--text)"/><rect x="51" y="86" width="4" height="4" fill="var(--text)"/><rect x="59" y="78" width="4" height="4" fill="var(--text)"/><rect x="35" y="90" width="4" height="4" fill="var(--text)"/><rect x="47" y="86" width="4" height="4" fill="var(--text)"/><rect x="70" y="78" width="4" height="4" fill="var(--text)"/><rect x="78" y="86" width="4" height="4" fill="var(--text)"/><rect x="86" y="82" width="4" height="4" fill="var(--text)"/><rect x="70" y="90" width="4" height="4" fill="var(--text)"/><rect x="82" y="78" width="4" height="4" fill="var(--text)"/></svg>`}
+};
+
+// ==================== STATE ====================
+const STORAGE_KEY='punchcard_v1';
+let STATE=null;
+let CURRENT_ROLE=null;
+let CURRENT_CAFE=null;
+let SCANNED_CUSTOMER=null;
+
+function initState(){
+  const saved=localStorage.getItem(STORAGE_KEY);
+  if(saved){
+    try{
+      STATE=JSON.parse(saved);
+    }catch(e){
+      STATE=null;
+    }
+    // Migrate v1 (no version field) to v2
+    if(STATE && !STATE.version && STATE.customer && !STATE.allCustomers){
+      STATE.allCustomers=[STATE.customer];
+      STATE.currentCustomerId=STATE.customer.id;
+      STATE.version=2;
+      saveState();
+    }
+    // Reset if corrupt
+    if(!STATE || !STATE.allCustomers || !STATE.customer){
+      STATE=createDemoState();
+      saveState();
+    }
+  }else{
+    STATE=createDemoState();
+    saveState();
+  }
+}
+
+function saveState(){
+  // Sync current customer back into allCustomers array before saving
+  if(STATE && STATE.allCustomers && STATE.currentCustomerId){
+    const idx=STATE.allCustomers.findIndex(c=>c.id===STATE.currentCustomerId);
+    if(idx>=0) STATE.allCustomers[idx]=STATE.customer;
+  }
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(STATE));
+}
+
+function switchCustomer(id){
+  // Sync current customer back to array
+  const idx=STATE.allCustomers.findIndex(c=>c.id===STATE.currentCustomerId);
+  if(idx>=0) STATE.allCustomers[idx]=STATE.customer;
+  // Switch
+  STATE.currentCustomerId=id;
+  STATE.customer=STATE.allCustomers.find(c=>c.id===id)||STATE.allCustomers[0];
+  saveState();
+  renderWallet();
+  renderProfile();
+  renderCafeList();
+  renderScanCafeList();
+}
+
+function getAllCustomers(){
+  if(!STATE || !STATE.allCustomers) return STATE.customer?[STATE.customer]:[];
+  // Ensure current customer is synced
+  const idx=STATE.allCustomers.findIndex(c=>c.id===STATE.currentCustomerId);
+  if(idx>=0) STATE.allCustomers[idx]=STATE.customer;
+  return STATE.allCustomers;
+}
+
+function createDemoState(){
+  const mkDate = (daysAgo, hour, min) => {
+    const d = new Date(); d.setDate(d.getDate()-daysAgo); d.setHours(hour||10,min||0,0,0); return d.toISOString();
+  };
+  const cafeNames = {cafe_a:'Brew & Bloom',cafe_b:'Roast Republic',cafe_c:'Daily Grind',cafe_d:'Morning Brew'};
+
+  const allCustomers = [
+    {id:'cust_001',name:'Alex Chen',email:'alex@email.com',phone:'+852 9123 4567',lang:'en',joined:mkDate(14),pendingRequests:[],stamps:[
+      {id:'s001',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(8,9,0),staffId:'staff_1',txId:'tx001',status:'active'},
+      {id:'s002',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(7,14,30),staffId:'staff_1',txId:'tx002',status:'active'},
+      {id:'s003',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(6,9,15),staffId:'staff_2',txId:'tx003',status:'active'},
+      {id:'s004',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(5,16,0),staffId:'staff_3',txId:'tx004',status:'active'},
+      {id:'s005',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(4,11,20),staffId:'staff_3',txId:'tx005',status:'active'},
+      {id:'s006',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(3,8,45),staffId:'staff_4',txId:'tx006',status:'active'},
+      {id:'s007',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(2,13,10),staffId:'staff_4',txId:'tx007',status:'active'},
+      {id:'s008',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(1,10,30),staffId:'staff_1',txId:'tx008',status:'active'},
+    ],rewards:[],redeemed:[]},
+    {id:'cust_002',name:'Maria Garcia',email:'maria@email.com',phone:'+852 9345 6789',lang:'en',joined:mkDate(20),pendingRequests:[],stamps:[
+      {id:'s009',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(12,8,0),staffId:'staff_1',txId:'tx009',status:'active'},
+      {id:'s010',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(11,15,30),staffId:'staff_2',txId:'tx010',status:'active'},
+      {id:'s011',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(10,9,0),staffId:'staff_1',txId:'tx011',status:'active'},
+      {id:'s012',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(9,10,0),staffId:'staff_3',txId:'tx012',status:'active'},
+      {id:'s013',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(8,14,0),staffId:'staff_4',txId:'tx013',status:'active'},
+      {id:'s014',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(7,11,0),staffId:'staff_3',txId:'tx014',status:'active'},
+      {id:'s015',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(6,16,30),staffId:'staff_4',txId:'tx015',status:'active'},
+      {id:'s016',cafeId:'cafe_c',cafeName:'Daily Grind',timestamp:mkDate(5,9,30),staffId:'staff_5',txId:'tx016',status:'active'},
+      {id:'s017',cafeId:'cafe_c',cafeName:'Daily Grind',timestamp:mkDate(4,13,0),staffId:'staff_5',txId:'tx017',status:'active'},
+      {id:'s018',cafeId:'cafe_d',cafeName:'Morning Brew',timestamp:mkDate(3,10,0),staffId:'staff_6',txId:'tx018',status:'active'},
+    ],rewards:[{id:'r001',stampsUsed:['s009','s010','s011','s012','s013','s014','s015','s016','s017','s018'],stampContributions:{cafe_a:3,cafe_b:4,cafe_c:2,cafe_d:1},status:'available',createdAt:mkDate(3,10,5),redeemedAt:null,redeemCafeId:null}],redeemed:[]},
+    {id:'cust_003',name:'James Wong',email:'james@email.com',phone:'+852 9567 8901',lang:'en',joined:mkDate(10),pendingRequests:[],stamps:[
+      {id:'s019',cafeId:'cafe_c',cafeName:'Daily Grind',timestamp:mkDate(6,8,30),staffId:'staff_5',txId:'tx019',status:'active'},
+      {id:'s020',cafeId:'cafe_c',cafeName:'Daily Grind',timestamp:mkDate(4,14,0),staffId:'staff_5',txId:'tx020',status:'active'},
+      {id:'s021',cafeId:'cafe_c',cafeName:'Daily Grind',timestamp:mkDate(2,9,45),staffId:'staff_5',txId:'tx021',status:'active'},
+    ],rewards:[],redeemed:[]},
+    {id:'cust_004',name:'Priya Patel',email:'priya@email.com',phone:'+852 9789 0123',lang:'en',joined:mkDate(30),pendingRequests:[],stamps:[
+      {id:'s022',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(18,9,0),staffId:'staff_1',txId:'tx022',status:'redeemed'},
+      {id:'s023',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(17,14,0),staffId:'staff_2',txId:'tx023',status:'redeemed'},
+      {id:'s024',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(16,10,30),staffId:'staff_1',txId:'tx024',status:'redeemed'},
+      {id:'s025',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(15,8,0),staffId:'staff_1',txId:'tx025',status:'redeemed'},
+      {id:'s026',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(14,11,0),staffId:'staff_3',txId:'tx026',status:'redeemed'},
+      {id:'s027',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(13,15,30),staffId:'staff_4',txId:'tx027',status:'redeemed'},
+      {id:'s028',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(12,9,0),staffId:'staff_3',txId:'tx028',status:'redeemed'},
+      {id:'s029',cafeId:'cafe_c',cafeName:'Daily Grind',timestamp:mkDate(11,10,0),staffId:'staff_5',txId:'tx029',status:'redeemed'},
+      {id:'s030',cafeId:'cafe_c',cafeName:'Daily Grind',timestamp:mkDate(10,13,30),staffId:'staff_5',txId:'tx030',status:'redeemed'},
+      {id:'s031',cafeId:'cafe_c',cafeName:'Daily Grind',timestamp:mkDate(9,8,30),staffId:'staff_5',txId:'tx031',status:'redeemed'},
+      {id:'s032',cafeId:'cafe_d',cafeName:'Morning Brew',timestamp:mkDate(5,9,0),staffId:'staff_6',txId:'tx032',status:'active'},
+      {id:'s033',cafeId:'cafe_d',cafeName:'Morning Brew',timestamp:mkDate(3,14,30),staffId:'staff_6',txId:'tx033',status:'active'},
+    ],rewards:[],redeemed:[{id:'r002',stampsUsed:['s022','s023','s024','s025','s026','s027','s028','s029','s030','s031'],stampContributions:{cafe_a:4,cafe_b:3,cafe_c:3},status:'redeemed',createdAt:mkDate(9,8,35),redeemedAt:mkDate(9,8,35),redeemCafeId:'cafe_c'}]},
+    {id:'cust_005',name:'Tom Hansen',email:'tom@email.com',phone:'+852 9012 3456',lang:'en',joined:mkDate(2),pendingRequests:[],stamps:[],rewards:[],redeemed:[]},
+    {id:'cust_006',name:'Sophie Laurent',email:'sophie@email.com',phone:'+852 9234 5678',lang:'en',joined:mkDate(8),pendingRequests:[{id:'req_001',cafeId:'cafe_a',cafeName:'Brew & Bloom',customerId:'cust_006',customerName:'Sophie Laurent',status:'pending',timestamp:mkDate(1,11,0)}],stamps:[
+      {id:'s034',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(7,9,0),staffId:'staff_1',txId:'tx034',status:'active'},
+      {id:'s035',cafeId:'cafe_a',cafeName:'Brew & Bloom',timestamp:mkDate(5,14,30),staffId:'staff_2',txId:'tx035',status:'active'},
+      {id:'s036',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(4,10,0),staffId:'staff_3',txId:'tx036',status:'active'},
+      {id:'s037',cafeId:'cafe_b',cafeName:'Roast Republic',timestamp:mkDate(3,15,0),staffId:'staff_4',txId:'tx037',status:'active'},
+      {id:'s038',cafeId:'cafe_c',cafeName:'Daily Grind',timestamp:mkDate(2,8,30),staffId:'staff_5',txId:'tx038',status:'active'},
+      {id:'s039',cafeId:'cafe_d',cafeName:'Morning Brew',timestamp:mkDate(1,12,0),staffId:'staff_6',txId:'tx039',status:'active'},
+    ],rewards:[],redeemed:[]}
+  ];
+
+  // Build ledger and settlements from all customers
+  let ledger=[], activities=[], settlements=[];
+  let nextLedger=1, nextSettlement=1, nextActivity=1;
+
+  allCustomers.forEach(cust=>{
+    cust.stamps.forEach(s=>{
+      ledger.push({id:'led_'+String(nextLedger++).padStart(3,'0'),type:'stamp',fromCafeId:null,toCafeId:s.cafeId,amount:0,customerId:cust.id,rewardId:null,status:'completed',timestamp:s.timestamp,note:'Stamp issued at '+s.cafeName});
+    });
+    cust.redeemed.forEach(r=>{
+      const val=30.0;
+      const contrib=r.stampContributions;
+      const settleId='set_'+String(nextSettlement++).padStart(3,'0');
+      const settleContributions={};
+      Object.entries(contrib).forEach(([cid,count])=>{
+        const amount=-(count/10)*val;
+        settleContributions[cid]={cafeName:cafeNames[cid]||cid,count:count,amount:amount};
+        ledger.push({id:'led_'+String(nextLedger++).padStart(3,'0'),type:'debit',fromCafeId:cid,toCafeId:r.redeemCafeId,amount:amount,customerId:cust.id,rewardId:r.id,status:'completed',timestamp:r.redeemedAt,note:'Settlement debit for reward '+r.id});
+      });
+      ledger.push({id:'led_'+String(nextLedger++).padStart(3,'0'),type:'credit',fromCafeId:null,toCafeId:r.redeemCafeId,amount:val,customerId:cust.id,rewardId:r.id,status:'completed',timestamp:r.redeemedAt,note:'Settlement credit for reward '+r.id});
+      settlements.push({id:settleId,rewardId:r.id,customerId:cust.id,customerName:cust.name,redeemCafeId:r.redeemCafeId,redeemCafeName:cafeNames[r.redeemCafeId]||r.redeemCafeId,settlementValue:val,contributions:settleContributions,status:'completed',timestamp:r.redeemedAt});
+    });
+  });
+
+  // Build activities from recent stamps
+  let allActs=[];
+  allCustomers.forEach(c=>{
+    c.stamps.slice(-3).forEach(s=>{
+      allActs.push({type:'stamp',cafeId:s.cafeId,customerName:c.name,detail:'Stamp added',timestamp:s.timestamp});
+    });
+  });
+  allActs.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+  allActs.slice(0,12).forEach((a,i)=>{a.id='act_'+String(i+1).padStart(3,'0');activities.push(a);});
+  nextActivity=activities.length+1;
+
+  // Count per-cafe totals
+  const cafeStamps={cafe_a:0,cafe_b:0,cafe_c:0,cafe_d:0};
+  const cafeRewards={cafe_a:0,cafe_b:0,cafe_c:0,cafe_d:0};
+  allCustomers.forEach(c=>{
+    c.stamps.forEach(s=>{if(cafeStamps[s.cafeId]!==undefined)cafeStamps[s.cafeId]++;});
+    c.redeemed.forEach(r=>{if(cafeRewards[r.redeemCafeId]!==undefined)cafeRewards[r.redeemCafeId]++;});
+  });
+
+  // Calculate balances from ledger
+  const balances={cafe_a:0,cafe_b:0,cafe_c:0,cafe_d:0};
+  ledger.forEach(l=>{
+    if(l.toCafeId && balances[l.toCafeId]!==undefined) balances[l.toCafeId]+=l.amount;
+  });
+
+  return{
+    version:2,
+    currentCustomerId:'cust_001',
+    customer:allCustomers[0],
+    allCustomers:allCustomers,
+    cafes:[
+      {id:'cafe_a',name:'Brew & Bloom',initial:'B',color:'#c25e00',address:'123 Main St',settlementValue:30.00,stampsRequired:10,reward:'1 free coffee',balance:balances.cafe_a,totalStampsIssued:cafeStamps.cafe_a,totalRewardsRedeemed:cafeRewards.cafe_a,staff:[{id:'staff_1',name:'Sarah',role:'Manager',pin:'1234'},{id:'staff_2',name:'Mike',role:'Barista',pin:'0000'}],active:true},
+      {id:'cafe_b',name:'Roast Republic',initial:'R',color:'#6b3a8c',address:'456 Oak Ave',settlementValue:30.00,stampsRequired:10,reward:'1 free coffee',balance:balances.cafe_b,totalStampsIssued:cafeStamps.cafe_b,totalRewardsRedeemed:cafeRewards.cafe_b,staff:[{id:'staff_3',name:'Jenny',role:'Owner',pin:'1234'},{id:'staff_4',name:'Tom',role:'Barista',pin:'0000'}],active:true},
+      {id:'cafe_c',name:'Daily Grind',initial:'D',color:'#2d7a3e',address:'789 Pine Rd',settlementValue:30.00,stampsRequired:10,reward:'1 free coffee',balance:balances.cafe_c,totalStampsIssued:cafeStamps.cafe_c,totalRewardsRedeemed:cafeRewards.cafe_c,staff:[{id:'staff_5',name:'Lisa',role:'Owner',pin:'1234'}],active:true},
+      {id:'cafe_d',name:'Morning Brew',initial:'M',color:'#1e5aa8',address:'321 Elm St',settlementValue:30.00,stampsRequired:10,reward:'1 free coffee',balance:balances.cafe_d,totalStampsIssued:cafeStamps.cafe_d,totalRewardsRedeemed:cafeRewards.cafe_d,staff:[{id:'staff_6',name:'David',role:'Owner',pin:'1234'}],active:true}
+    ],
+    ledger:ledger,
+    settlements:settlements,
+    activities:activities,
+    nextIds:{stamp:40,reward:3,ledger:nextLedger,settlement:nextSettlement,activity:nextActivity}
+  };
+}
+
+// ==================== NAVIGATION ====================
+function enterApp(){
+  document.getElementById('landing-page').classList.add('hide');
+  document.getElementById('app-shell').classList.remove('hide');
+  initState();
+}
+function exitApp(){
+  document.getElementById('app-shell').classList.add('hide');
+  document.getElementById('landing-page').classList.remove('hide');
+  document.getElementById('role-select').classList.remove('hide');
+  document.getElementById('customer-app').classList.add('hide');
+  document.getElementById('cafe-app').classList.add('hide');
+  document.getElementById('admin-app').classList.add('hide');
+  CURRENT_ROLE=null;
+  CURRENT_CAFE=null;
+}
+
+function backToRoleSelect(){
+  document.getElementById('customer-app').classList.add('hide');
+  document.getElementById('cafe-app').classList.add('hide');
+  document.getElementById('admin-app').classList.add('hide');
+  document.getElementById('role-select').classList.remove('hide');
+  CURRENT_ROLE=null;
+  CURRENT_CAFE=null;
+}
+function setRole(role){
+  CURRENT_ROLE=role;
+  document.getElementById('role-select').classList.add('hide');
+  if(role==='customer'){
+    document.getElementById('customer-app').classList.remove('hide');
+    renderWallet();
+    renderCafeList();
+    renderScanCafeList();
+  }else if(role==='cafe'){
+    CURRENT_CAFE='cafe_c';
+    document.getElementById('cafe-app').classList.remove('hide');
+    goCafe('dash');
+  }else if(role==='admin'){
+    document.getElementById('admin-app').classList.remove('hide');
+    goAdmin('overview');
+  }
+}
+
+// ==================== CUSTOMER APP ====================
+function goCust(screen){
+  document.querySelectorAll('.cust-scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById('cust-'+screen).classList.add('on');
+  if(screen==='scan')renderScanCafeList();
+}
+function setCustTab(idx){
+  document.querySelectorAll('.cust-tab').forEach((t,i)=>t.classList.toggle('on',i===idx));
+}
+
+function renderWallet(){
+  const c=STATE.customer;
+  const initials=c.name.split(' ').map(n=>n[0]).join('');
+  const av=document.getElementById('cust-avatar');
+  if(av)av.textContent=initials;
+  const activeStamps=c.stamps.filter(s=>s.status==='active');
+  const total=activeStamps.length;
+  const target=10;
+  const pending=c.pendingRequests?c.pendingRequests.filter(p=>p.status==='pending').length:0;
+
+  const visitedCafes=[...new Set(c.stamps.map(s=>s.cafeId))].length;
+  document.getElementById('wallet-cafes').textContent=visitedCafes+' café'+(visitedCafes!==1?'s':'');
+
+  let statusText=total>=target?'Reward ready!':'Collecting stamps...';
+  if(pending>0)statusText=pending+' pending approval'+(pending>1?'s':'');
+  document.getElementById('wallet-status').textContent=statusText;
+  document.getElementById('wallet-status').style.color=total>=target?'var(--green)':pending>0?'var(--blue)':'#8b6f47';
+
+  document.getElementById('wallet-progress-bar').style.width=(total/target*100)+'%';
+
+  const container=document.getElementById('wallet-stamps-container');
+
+  // Row 1: stamps 1-5
+  let html='<div class="wallet-stamps-row">';
+  for(let i=0;i<5;i++){
+    const filled=i<total;
+    html+=`<div class="wallet-stamp ${filled?'filled':'empty'}">
+      <span class="wallet-stamp-num">${i+1}</span>
+      ${filled?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 8h1.79c.45 0 .67-.54.35-.85l-5.36-5.37a.996.996 0 0 0-1.41 0L12 3.41 6.41 8H8c0 2.21-1.79 4-4 4v2h16v-2c-2.21 0-4-1.79-4-4zM12 19c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z" fill="#d4b896"/></svg>':''}
+    </div>`;
+  }
+  html+='</div>';
+
+  // Row 2: stamps 6-9 + FREE
+  html+='<div class="wallet-stamps-row">';
+  for(let i=5;i<9;i++){
+    const filled=i<total;
+    html+=`<div class="wallet-stamp ${filled?'filled':'empty'}">
+      <span class="wallet-stamp-num">${i+1}</span>
+      ${filled?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 8h1.79c.45 0 .67-.54.35-.85l-5.36-5.37a.996.996 0 0 0-1.41 0L12 3.41 6.41 8H8c0 2.21-1.79 4-4 4v2h16v-2c-2.21 0-4-1.79-4-4zM12 19c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z" fill="#d4b896"/></svg>':''}
+    </div>`;
+  }
+  // Slot 10 = FREE
+  const freeReady=total>=target;
+  html+=`<div class="wallet-stamp ${freeReady?'free':'empty'}">
+    <span class="wallet-stamp-num">10</span>
+    ${freeReady?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="var(--accent)"/></svg>':'<span style="font-size:10px;font-weight:700;color:#b8956a">FREE</span>'}
+  </div>`;
+  html+='</div>';
+
+  container.innerHTML=html;
+
+  if(total>=target && c.rewards.length===0){
+    createReward();
+  }
+}
+
+function renderCafeList(){
+  const list=document.getElementById('cafe-list');
+  list.innerHTML=STATE.cafes.filter(c=>c.active).map(c=>{
+    const custStamps=STATE.customer.stamps.filter(s=>s.cafeId===c.id&&s.status==='active').length;
+    return `<div class="cafe-card-row" onclick="openCafeDetail('${c.id}')">
+      <div class="cafe-av" style="background:${c.color}15;color:${c.color}">${c.initial}</div>
+      <div class="cafe-meta">
+        <h4>${c.name}</h4>
+        <p>${c.address}</p>
+        <div class="stamp-dots">${Array(10).fill(0).map((_,i)=>'<div class="dot '+(i<custStamps?'on':'off')+'"></div>').join('')}</div>
+      </div>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="color:var(--text-3);flex-shrink:0"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="currentColor"/></svg>
+    </div>`;
+  }).join('');
+}
+
+function renderScanCafeList(){
+  const list=document.getElementById('scan-cafe-list');
+  list.innerHTML=STATE.cafes.filter(c=>c.active).map(c=>`
+    <button class="scan-cafe-btn" onclick="requestStamp('${c.id}')">
+      <div class="cafe-av" style="background:${c.color}15;color:${c.color}">${c.initial}</div>
+      <div style="flex:1;text-align:left"><p style="font-weight:600;font-size:15px;margin:0">${c.name}</p><p style="font-size:13px;color:var(--text-2);margin:0">${c.address}</p></div>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="color:var(--text-3)"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="currentColor"/></svg>
+    </button>
+  `).join('');
+}
+
+function requestStamp(cafeId){
+  const cafe=STATE.cafes.find(c=>c.id===cafeId);
+  const c=STATE.customer;
+  const activeStamps=c.stamps.filter(s=>s.status==='active');
+
+  if(activeStamps.length>=10){
+    alert('You already have a reward ready!');
+    return;
+  }
+
+  const now=new Date().toISOString();
+  const reqId='req_'+Date.now();
+
+  if(!c.pendingRequests)c.pendingRequests=[];
+  c.pendingRequests.push({
+    id:reqId,cafeId:cafe.id,cafeName:cafe.name,
+    customerId:c.id,customerName:c.name,
+    status:'pending',timestamp:now
+  });
+
+  const actId='act_'+String(STATE.nextIds.activity).padStart(3,'0');
+  STATE.nextIds.activity++;
+  STATE.activities.unshift({
+    id:actId,type:'request',cafeId:cafe.id,customerName:c.name,
+    detail:'Stamp request from '+c.name,timestamp:now
+  });
+
+  saveState();
+  document.getElementById('scan-ok-msg').textContent=`Stamp request sent to ${cafe.name}. A staff member will approve it shortly.`;
+  goCust('scan-ok');
+}
+
+function openCafeDetail(cafeId){
+  const cafe=STATE.cafes.find(c=>c.id===cafeId);
+  const custStamps=STATE.customer.stamps.filter(s=>s.cafeId===cafeId&&s.status==='active').length;
+  const body=document.getElementById('cust-cafe-body');
+  body.innerHTML=`
+    <div class="c p-24">
+      <div class="cafe-av" style="background:${cafe.color}15;color:${cafe.color};width:72px;height:72px;font-size:28px;margin:0 auto 12px">${cafe.initial}</div>
+      <h3 class="text-xl font-700">${cafe.name}</h3>
+      <p class="text-sm text-2">${cafe.address}</p>
+    </div>
+    <div class="card mb-16">
+      <p class="text-sm text-2 mb-8">Your stamps here</p>
+      <div class="stamp-grid" style="margin:0">${Array(10).fill(0).map((_,i)=>`<div class="stamp ${i<custStamps?'filled':'empty'}">${i<custStamps?IC.check:''}</div>`).join('')}</div>
+      <p class="text-sm text-2 c mt-12">${custStamps} of 10 stamps</p>
+    </div>
+    <button class="btn btn-pri w-full" onclick="goCust('qr');document.getElementById('cust-qr-box').innerHTML=IC.qr()">Show QR code</button>
+  `;
+  goCust('cafe');
+}
+
+function simStamp(){
+  const c=STATE.customer;
+  const activeStamps=c.stamps.filter(s=>s.status==='active');
+  if(activeStamps.length>=10){
+    goCust('reward');
+    renderReward();
+    return;
+  }
+  const cafeIds=['cafe_a','cafe_b','cafe_c','cafe_d'];
+  const randomCafe=STATE.cafes.find(c=>c.id===cafeIds[Math.floor(Math.random()*cafeIds.length)]);
+  const stampId='s'+String(STATE.nextIds.stamp).padStart(3,'0');
+  STATE.nextIds.stamp++;
+  const now=new Date().toISOString();
+
+  c.stamps.push({
+    id:stampId,cafeId:randomCafe.id,cafeName:randomCafe.name,
+    timestamp:now,staffId:'staff_demo',txId:'tx'+stampId,status:'active'
+  });
+
+  randomCafe.totalStampsIssued++;
+
+  const ledId='led_'+String(STATE.nextIds.ledger).padStart(3,'0');
+  STATE.nextIds.ledger++;
+  STATE.ledger.push({
+    id:ledId,type:'stamp',fromCafeId:null,toCafeId:randomCafe.id,amount:0,
+    customerId:c.id,rewardId:null,status:'completed',timestamp:now,
+    note:'Stamp issued at '+randomCafe.name
+  });
+
+  const actId='act_'+String(STATE.nextIds.activity).padStart(3,'0');
+  STATE.nextIds.activity++;
+  STATE.activities.unshift({
+    id:actId,type:'stamp',cafeId:randomCafe.id,customerName:c.name,
+    detail:'Stamp added',timestamp:now
+  });
+
+  saveState();
+
+  document.getElementById('stamp-ok-msg').textContent=`Stamp added at ${randomCafe.name}!`;
+  const grid=document.getElementById('stamp-ok-grid');
+  const newTotal=c.stamps.filter(s=>s.status==='active').length;
+  grid.innerHTML=Array(10).fill(0).map((_,i)=>`<div class="stamp ${i<newTotal?'filled':'empty'}">${i<newTotal?IC.check:''}</div>`).join('');
+  goCust('stamp-ok');
+}
+
+function createReward(){
+  const c=STATE.customer;
+  const activeStamps=c.stamps.filter(s=>s.status==='active');
+  if(activeStamps.length<10)return;
+
+  const rewardId='r'+String(STATE.nextIds.reward).padStart(3,'0');
+  STATE.nextIds.reward++;
+
+  const stampCounts={};
+  activeStamps.slice(0,10).forEach(s=>{
+    stampCounts[s.cafeId]=(stampCounts[s.cafeId]||0)+1;
+  });
+
+  c.rewards.push({
+    id:rewardId,stampsUsed:activeStamps.slice(0,10).map(s=>s.id),
+    stampContributions:stampCounts,status:'available',
+    createdAt:new Date().toISOString(),redeemedAt:null,redeemCafeId:null
+  });
+  saveState();
+}
+
+function renderReward(){
+  const c=STATE.customer;
+  const reward=c.rewards.find(r=>r.status==='available');
+  if(!reward)return;
+
+  const cafes=STATE.cafes.filter(c=>c.active);
+  document.getElementById('redeem-cafes').innerHTML=cafes.map(c=>`
+    <div class="cafe-card-row" onclick="redeemReward('${c.id}')">
+      <div class="cafe-av" style="background:${c.color}15;color:${c.color}">${c.initial}</div>
+      <div class="cafe-meta"><h4>${c.name}</h4><p>${c.address}</p></div>
+      <span class="badge badge-green">Redeem here</span>
+    </div>
+  `).join('');
+}
+
+function redeemReward(cafeId){
+  const c=STATE.customer;
+  const reward=c.rewards.find(r=>r.status==='available');
+  if(!reward)return;
+
+  const cafe=STATE.cafes.find(c=>c.id===cafeId);
+  const now=new Date().toISOString();
+
+  reward.status='redeemed';
+  reward.redeemedAt=now;
+  reward.redeemCafeId=cafeId;
+  c.redeemed.push(reward);
+
+  reward.stampsUsed.forEach(sid=>{
+    const stamp=c.stamps.find(s=>s.id===sid);
+    if(stamp)stamp.status='redeemed';
+  });
+
+  cafe.totalRewardsRedeemed++;
+
+  const settlementValue=cafe.settlementValue;
+  const totalStamps=10;
+  const contributions=reward.stampContributions;
+
+  const settleId='set_'+String(STATE.nextIds.settlement).padStart(3,'0');
+  STATE.nextIds.settlement++;
+
+  const settlement={
+    id:settleId,rewardId:reward.id,customerId:c.id,customerName:c.name,
+    redeemCafeId:cafeId,redeemCafeName:cafe.name,settlementValue:settlementValue,
+    contributions:{},status:'completed',timestamp:now
+  };
+
+  Object.entries(contributions).forEach(([cid,count])=>{
+    const contribCafe=STATE.cafes.find(c=>c.id===cid);
+    const amount=-(count/totalStamps)*settlementValue;
+    settlement.contributions[cid]={cafeName:contribCafe.name,count:count,amount:amount};
+    contribCafe.balance+=amount;
+
+    const ledId='led_'+String(STATE.nextIds.ledger).padStart(3,'0');
+    STATE.nextIds.ledger++;
+    STATE.ledger.push({
+      id:ledId,type:'debit',fromCafeId:cid,toCafeId:cafeId,amount:amount,
+      customerId:c.id,rewardId:reward.id,status:'completed',timestamp:now,
+      note:`Settlement: ${contribCafe.name} owes ${Math.abs(amount).toFixed(2)} for reward ${reward.id}`
+    });
+  });
+
+  const creditAmount=settlementValue;
+  cafe.balance+=creditAmount;
+  settlement.contributions[cafeId]={cafeName:cafe.name,count:0,amount:creditAmount};
+
+  const credLedId='led_'+String(STATE.nextIds.ledger).padStart(3,'0');
+  STATE.nextIds.ledger++;
+  STATE.ledger.push({
+    id:credLedId,type:'credit',fromCafeId:null,toCafeId:cafeId,amount:creditAmount,
+    customerId:c.id,rewardId:reward.id,status:'completed',timestamp:now,
+    note:`Settlement: ${cafe.name} receives ${creditAmount.toFixed(2)} for reward ${reward.id}`
+  });
+
+  STATE.settlements.push(settlement);
+
+  const actId='act_'+String(STATE.nextIds.activity).padStart(3,'0');
+  STATE.nextIds.activity++;
+  STATE.activities.unshift({
+    id:actId,type:'reward',cafeId:cafeId,customerName:c.name,
+    detail:`Reward redeemed at ${cafe.name}`,timestamp:now
+  });
+
+  saveState();
+
+  document.getElementById('redeem-ok-msg').textContent=`You redeemed your free coffee at ${cafe.name}`;
+  let settleHtml='<div style="display:flex;flex-direction:column;gap:8px">';
+  Object.entries(contributions).forEach(([cid,count])=>{
+    const contribCafe=STATE.cafes.find(c=>c.id===cid);
+    const amount=(count/totalStamps)*settlementValue;
+    settleHtml+=`<div class="flex justify-between"><span>${contribCafe.name} (${count} stamps)</span><span style="color:var(--red);font-weight:500">-$${amount.toFixed(2)}</span></div>`;
+  });
+  settleHtml+=`<div class="flex justify-between" style="border-top:1px solid var(--border);padding-top:8px;margin-top:4px"><span>${cafe.name}</span><span style="color:var(--green);font-weight:500">+$${settlementValue.toFixed(2)}</span></div>`;
+  settleHtml+='</div>';
+  document.getElementById('redeem-settlement').innerHTML=settleHtml;
+
+  goCust('redeem-ok');
+}
+
+function renderProfile(){
+  const c=STATE.customer;
+  const activeStamps=c.stamps.filter(s=>s.status==='active');
+  const visitedCafes=[...new Set(c.stamps.map(s=>s.cafeId))];
+  const initials=c.name.split(' ').map(n=>n[0]).join('');
+
+  document.getElementById('prof-avatar').textContent=initials;
+  document.getElementById('prof-name').textContent=c.name;
+  document.getElementById('prof-email').textContent=c.email;
+  document.getElementById('prof-phone').textContent=c.phone||'Not added';
+  document.getElementById('prof-stamps').textContent=c.stamps.length;
+  document.getElementById('prof-rewards').textContent=c.redeemed.length;
+  document.getElementById('prof-cafes').textContent=visitedCafes.length;
+
+  // Customer switcher
+  document.getElementById('customer-switcher').innerHTML=getAllCustomers().map(cust=>{
+    const isActive=cust.id===STATE.currentCustomerId;
+    const custInitials=cust.name.split(' ').map(n=>n[0]).join('');
+    const stampCount=cust.stamps.filter(s=>s.status==='active').length;
+    return `<button class="cafe-card-row" style="${isActive?'border-color:var(--accent);background:var(--accent-bg)':''}" onclick="switchCustomer('${cust.id}')">
+      <div class="cafe-av" style="background:var(--blue-bg);color:var(--blue);width:40px;height:40px;font-size:14px">${custInitials}</div>
+      <div class="cafe-meta"><h4>${cust.name}</h4><p class="text-sm text-2">${stampCount}/10 stamps · ${cust.redeemed.length} redeemed</p></div>
+      ${isActive?'<span class="badge badge-green">Active</span>':''}
+    </button>`;
+  }).join('');
+
+  const hist=document.getElementById('prof-history');
+  hist.innerHTML=c.stamps.slice().reverse().map(s=>{
+    const date=new Date(s.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<div class="cafe-card-row" style="cursor:pointer" onclick="showHistory('${s.id}')">
+      <div class="cafe-av" style="background:var(--bg-2);color:var(--text);width:36px;height:36px;font-size:14px">☕</div>
+      <div class="cafe-meta"><h4>${s.cafeName}</h4><p class="text-xs text-2">${date} · ${s.status==='active'?'Active':'Redeemed'}</p></div>
+      <span class="badge ${s.status==='active'?'badge-green':'badge-amber'}">${s.status==='active'?'Active':'Used'}</span>
+    </div>`;
+  }).join('');
+}
+
+function showHistory(stampId){
+  const stamp=STATE.customer.stamps.find(s=>s.id===stampId);
+  if(!stamp)return;
+  const body=document.getElementById('cust-history-body');
+  const date=new Date(stamp.timestamp).toLocaleString('en-US');
+  body.innerHTML=`
+    <div class="p-24">
+      <div class="card mb-16">
+        <div class="flex justify-between items-center mb-8"><span class="text-sm text-2">Transaction ID</span><span class="text-sm font-600 font-mono">${stamp.txId}</span></div>
+        <div class="flex justify-between items-center mb-8"><span class="text-sm text-2">Café</span><span class="text-sm font-600">${stamp.cafeName}</span></div>
+        <div class="flex justify-between items-center mb-8"><span class="text-sm text-2">Date</span><span class="text-sm font-600">${date}</span></div>
+        <div class="flex justify-between items-center mb-8"><span class="text-sm text-2">Staff</span><span class="text-sm font-600">${stamp.staffId}</span></div>
+        <div class="flex justify-between items-center"><span class="text-sm text-2">Status</span><span class="badge ${stamp.status==='active'?'badge-green':'badge-amber'}">${stamp.status==='active'?'Active':'Redeemed'}</span></div>
+      </div>
+    </div>
+  `;
+  goCust('history');
+}
+
+// ==================== CAFE DASHBOARD ====================
+function goCafe(screen){
+  document.querySelectorAll('.cafe-nav-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('nav-'+screen)?.classList.add('on');
+  ['dash','scan','customers','financials','settings'].forEach(s=>{
+    document.getElementById('cafe-'+s).classList.add('hide');
+  });
+  document.getElementById('cafe-'+screen).classList.remove('hide');
+
+  if(screen==='dash')renderCafeDash();
+  if(screen==='scan'){document.getElementById('scan-result').style.display='none';document.getElementById('scan-qr').innerHTML=IC.qr();}
+  if(screen==='customers')renderCafeCustomers();
+  if(screen==='financials')renderCafeFinancials();
+  if(screen==='settings')renderCafeSettings();
+}
+
+function renderCafeDash(){
+  const cafe=STATE.cafes.find(c=>c.id===CURRENT_CAFE);
+  if(!cafe)return;
+
+  const customers=new Set();
+  getAllCustomers().forEach(cust=>{
+    cust.stamps.filter(s=>s.cafeId===cafe.id).forEach(s=>customers.add(cust.id));
+  });
+
+  document.getElementById('dash-cust').textContent=customers.size;
+  document.getElementById('dash-stamps').textContent=cafe.totalStampsIssued;
+  document.getElementById('dash-rewards').textContent=cafe.totalRewardsRedeemed;
+  document.getElementById('dash-balance').textContent=(cafe.balance>=0?'+':'')+'$'+cafe.balance.toFixed(2);
+  document.getElementById('dash-balance').style.color=cafe.balance>=0?'var(--green)':'var(--red)';
+
+  document.getElementById('cafe-qr-box').innerHTML=IC.qr();
+
+  // Render pending approvals
+  let pending=[];getAllCustomers().forEach(cust=>{if(cust.pendingRequests)pending=pending.concat(cust.pendingRequests.filter(p=>p.status==='pending'&&p.cafeId===cafe.id));});
+  document.getElementById('cafe-pending').innerHTML=pending.length>0?pending.map(p=>{
+    const date=new Date(p.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `<div class="pending-card">
+      <div class="cafe-av" style="background:var(--blue-bg);color:var(--blue)">${p.customerName.charAt(0)}</div>
+      <div class="pending-meta">
+        <h4>${p.customerName}</h4>
+        <p>Stamp request · ${date}</p>
+      </div>
+      <div class="pending-actions">
+        <button class="approve" onclick="approveStamp('${p.id}')">Approve</button>
+        <button class="reject" onclick="rejectStamp('${p.id}')">Reject</button>
+      </div>
+    </div>`;
+  }).join(''):'<p class="text-sm text-2 c py-16">No pending approvals</p>';
+
+  const acts=STATE.activities.filter(a=>a.cafeId===cafe.id).slice(0,5);
+  document.getElementById('cafe-activity').innerHTML=acts.map(a=>{
+    const date=new Date(a.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `<div class="flex justify-between items-center py-8" style="border-bottom:1px solid var(--border)">
+      <div class="flex items-center gap-12">
+        <div class="cafe-av" style="background:var(--bg-2);color:var(--text);width:32px;height:32px;font-size:12px">☕</div>
+        <div><p class="text-sm font-500">${a.customerName}</p><p class="text-xs text-2">${a.detail}</p></div>
+      </div>
+      <span class="text-xs text-3">${date}</span>
+    </div>`;
+  }).join('') || '<p class="text-sm text-2 c py-16">No recent activity</p>';
+}
+
+function simScanCustomer(){
+  const pickerHtml=`<div style="margin-bottom:16px"><label style="font-size:13px;font-weight:500;color:var(--text-2);display:block;margin-bottom:8px">Select customer to scan</label><select id="scan-cust-select" onchange="onScanCustomerChange(this.value)" style="width:100%;padding:12px 14px;border:1px solid var(--border-2);border-radius:var(--radius-md);font-size:16px;background:var(--surface);color:var(--text);outline:none"><option value="">-- Choose customer --</option>${getAllCustomers().map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}</select></div><div id="scan-result-inner"></div>`;
+  document.getElementById('scan-result').innerHTML=pickerHtml;
+  document.getElementById('scan-result').style.display='block';
+}
+
+function onScanCustomerChange(custId){
+  if(!custId){document.getElementById('scan-result-inner').innerHTML='';return;}
+  SCANNED_CUSTOMER=getAllCustomers().find(c=>c.id===custId);
+  const c=SCANNED_CUSTOMER;
+  const activeStamps=c.stamps.filter(s=>s.status==='active').length;
+  const hasReward=c.rewards.some(r=>r.status==='available');
+  const initials=c.name.split(' ').map(n=>n[0]).join('');
+  document.getElementById('scan-result-inner').innerHTML=`<div class="flex items-center gap-12 mb-12"><div class="cafe-av" style="background:var(--blue-bg);color:var(--blue);width:44px;height:44px;font-size:16px">${initials}</div><div><p class="font-600">${c.name}</p><p class="text-sm text-2">${hasReward?'Reward available!':activeStamps+'/10 stamps'}</p></div></div><div class="flex gap-8"><button class="btn btn-pri flex-1" onclick="cafeAddStamp()">Add stamp</button><button class="btn btn-outline flex-1" onclick="cafeVerifyReward()">Verify reward</button></div>`;
+}
+
+function approveStamp(reqId){
+  const cafe=STATE.cafes.find(c=>c.id===CURRENT_CAFE);
+  let c=null, req=null;
+  for(let cust of getAllCustomers()){
+    if(cust.pendingRequests){
+      const found=cust.pendingRequests.find(p=>p.id===reqId);
+      if(found){c=cust;req=found;break;}
+    }
+  }
+  if(!req)return;
+  if(!req)return;
+
+  req.status='approved';
+
+  const stampId='s'+String(STATE.nextIds.stamp).padStart(3,'0');
+  STATE.nextIds.stamp++;
+  const now=new Date().toISOString();
+
+  c.stamps.push({
+    id:stampId,cafeId:cafe.id,cafeName:cafe.name,
+    timestamp:now,staffId:'staff_1',txId:'tx'+stampId,status:'active'
+  });
+  cafe.totalStampsIssued++;
+
+  const ledId='led_'+String(STATE.nextIds.ledger).padStart(3,'0');
+  STATE.nextIds.ledger++;
+  STATE.ledger.push({
+    id:ledId,type:'stamp',fromCafeId:null,toCafeId:cafe.id,amount:0,
+    customerId:c.id,rewardId:null,status:'completed',timestamp:now,
+    note:'Stamp approved at '+cafe.name
+  });
+
+  const actId='act_'+String(STATE.nextIds.activity).padStart(3,'0');
+  STATE.nextIds.activity++;
+  STATE.activities.unshift({
+    id:actId,type:'stamp',cafeId:cafe.id,customerName:c.name,
+    detail:'Stamp approved',timestamp:now
+  });
+
+  saveState();
+  renderCafeDash();
+}
+
+function rejectStamp(reqId){
+  let req=null;
+  for(let cust of getAllCustomers()){
+    if(cust.pendingRequests){
+      req=cust.pendingRequests.find(p=>p.id===reqId);
+      if(req)break;
+    }
+  }
+  if(!req)return;
+  req.status='rejected';
+  saveState();
+  renderCafeDash();
+}
+
+function cafeAddStamp(){
+  const cafe=STATE.cafes.find(c=>c.id===CURRENT_CAFE);
+  const c=STATE.customer;
+  const activeStamps=c.stamps.filter(s=>s.status==='active');
+
+  if(activeStamps.length>=10){
+    alert('Customer already has a reward available!');
+    return;
+  }
+
+  const stampId='s'+String(STATE.nextIds.stamp).padStart(3,'0');
+  STATE.nextIds.stamp++;
+  const now=new Date().toISOString();
+
+  c.stamps.push({
+    id:stampId,cafeId:cafe.id,cafeName:cafe.name,
+    timestamp:now,staffId:'staff_1',txId:'tx'+stampId,status:'active'
+  });
+  cafe.totalStampsIssued++;
+
+  const ledId='led_'+String(STATE.nextIds.ledger).padStart(3,'0');
+  STATE.nextIds.ledger++;
+  STATE.ledger.push({
+    id:ledId,type:'stamp',fromCafeId:null,toCafeId:cafe.id,amount:0,
+    customerId:c.id,rewardId:null,status:'completed',timestamp:now,
+    note:'Stamp issued at '+cafe.name
+  });
+
+  const actId='act_'+String(STATE.nextIds.activity).padStart(3,'0');
+  STATE.nextIds.activity++;
+  STATE.activities.unshift({
+    id:actId,type:'stamp',cafeId:cafe.id,customerName:c.name,
+    detail:'Stamp added',timestamp:now
+  });
+
+  saveState();
+  alert(`Stamp added for ${c.name} at ${cafe.name}!`);
+  SCANNED_CUSTOMER=null;
+  goCafe('dash');
+}
+
+function cafeVerifyReward(){
+  const c=SCANNED_CUSTOMER||STATE.customer;
+  const reward=c.rewards.find(r=>r.status==='available');
+  if(!reward){
+    alert('No reward available for this customer.');
+    return;
+  }
+  if(confirm(`Verify reward for ${c.name}? This will redeem 1 free coffee.`)){
+    const prevId=STATE.currentCustomerId;
+    STATE.currentCustomerId=c.id;
+    STATE.customer=c;
+    redeemReward(CURRENT_CAFE);
+    STATE.currentCustomerId=prevId;
+    STATE.customer=getAllCustomers().find(x=>x.id===prevId)||getAllCustomers()[0];
+    SCANNED_CUSTOMER=null;
+    goCafe('dash');
+  }
+}
+
+function renderCafeCustomers(){
+  const cafe=STATE.cafes.find(c=>c.id===CURRENT_CAFE);
+  const rows=getAllCustomers().map(cust=>{
+    const custStamps=cust.stamps.filter(s=>s.cafeId===cafe.id);
+    if(custStamps.length===0 && cust.pendingRequests.filter(p=>p.cafeId===cafe.id).length===0)return '';
+    const lastVisit=custStamps.length>0?new Date(custStamps[custStamps.length-1].timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'Never';
+    const initials=cust.name.split(' ').map(n=>n[0]).join('');
+    return `<tr><td><div class="flex items-center gap-8"><div class="cafe-av" style="background:var(--blue-bg);color:var(--blue);width:32px;height:32px;font-size:12px">${initials}</div><span class="font-500">${cust.name}</span></div></td><td>${custStamps.length}</td><td>${cust.redeemed.length}</td><td class="text-2">${lastVisit}</td></tr>`;
+  }).join('');
+  document.getElementById('cafe-cust-table').innerHTML=rows||'<tr><td colspan="4" class="c text-2 py-16">No customers yet</td></tr>';
+}
+
+function renderCafeFinancials(){
+  const cafe=STATE.cafes.find(c=>c.id===CURRENT_CAFE);
+  const ledgerEntries=STATE.ledger.filter(l=>l.toCafeId===cafe.id||l.fromCafeId===cafe.id);
+
+  let owed=0,earned=0;
+  ledgerEntries.forEach(l=>{
+    if(l.toCafeId===cafe.id && l.amount>0)earned+=l.amount;
+    if(l.fromCafeId===cafe.id && l.amount<0)owed+=Math.abs(l.amount);
+  });
+
+  document.getElementById('fin-owed').textContent='$'+owed.toFixed(2);
+  document.getElementById('fin-earned').textContent='$'+earned.toFixed(2);
+  document.getElementById('fin-net').textContent=(cafe.balance>=0?'+':'')+'$'+cafe.balance.toFixed(2);
+  document.getElementById('fin-net').style.color=cafe.balance>=0?'var(--green)':'var(--red)';
+
+  document.getElementById('cafe-ledger').innerHTML=ledgerEntries.slice().reverse().map(l=>{
+    const date=new Date(l.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const isDebit=l.amount<0;
+    const isCredit=l.amount>0;
+    return `<tr>
+      <td class="text-2">${date}</td>
+      <td><span class="badge ${isDebit?'badge-red':isCredit?'badge-green':'badge-blue'}">${l.type}</span></td>
+      <td class="text-sm">${l.note||l.type}</td>
+      <td class="font-600 ${isDebit?'text-2':isCredit?'font-600':''}" style="color:${isDebit?'var(--red)':isCredit?'var(--green-2)':'inherit'}">${l.amount!==0?(l.amount>0?'+':'')+'$'+Math.abs(l.amount).toFixed(2):'—'}</td>
+      <td><span class="badge badge-green">${l.status}</span></td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="5" class="c text-2 py-16">No ledger entries</td></tr>';
+}
+
+function renderCafeSettings(){
+  const cafe=STATE.cafes.find(c=>c.id===CURRENT_CAFE);
+  document.getElementById('set-stamps').value=cafe.stampsRequired;
+  document.getElementById('set-reward').value=cafe.reward;
+  document.getElementById('set-value').value=cafe.settlementValue.toFixed(2);
+
+  document.getElementById('staff-list').innerHTML=cafe.staff.map(s=>`
+    <div class="flex justify-between items-center py-8" style="border-bottom:1px solid var(--border)">
+      <div><p class="text-sm font-500">${s.name}</p><p class="text-xs text-2">${s.role}</p></div>
+      <span class="badge badge-blue">PIN: ${s.pin}</span>
+    </div>
+  `).join('');
+}
+
+function saveSettings(){
+  const cafe=STATE.cafes.find(c=>c.id===CURRENT_CAFE);
+  cafe.stampsRequired=parseInt(document.getElementById('set-stamps').value);
+  cafe.reward=document.getElementById('set-reward').value;
+  cafe.settlementValue=parseFloat(document.getElementById('set-value').value);
+  saveState();
+  alert('Settings saved!');
+}
+
+function addStaff(){
+  const name=prompt('Staff name:');
+  if(!name)return;
+  const cafe=STATE.cafes.find(c=>c.id===CURRENT_CAFE);
+  cafe.staff.push({id:'staff_'+Date.now(),name:name,role:'Barista',pin:'0000'});
+  saveState();
+  renderCafeSettings();
+}
+
+// ==================== ADMIN PANEL ====================
+function goAdmin(screen){
+  document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('on'));
+  const navBtn=document.getElementById('adm-nav-'+screen);
+  if(navBtn)navBtn.classList.add('on');
+  ['overview','cafes','customers','stamps','rewards','settlements','ledger'].forEach(s=>{
+    const el=document.getElementById('admin-'+s);
+    if(el)el.classList.add('hide');
+  });
+  const target=document.getElementById('admin-'+screen);
+  if(target)target.classList.remove('hide');
+
+  if(screen==='overview')renderAdminOverview();
+  if(screen==='cafes')renderAdminCafes();
+  if(screen==='customers')renderAdminCustomers();
+  if(screen==='stamps')renderAdminStamps();
+  if(screen==='rewards')renderAdminRewards();
+  if(screen==='settlements')renderAdminSettlements();
+  if(screen==='ledger')renderAdminLedger();
+}
+
+function renderAdminOverview(){
+  const activeCafes=STATE.cafes.filter(c=>c.active);
+  const totalStamps=STATE.cafes.reduce((a,c)=>a+c.totalStampsIssued,0);
+  const totalRewards=STATE.cafes.reduce((a,c)=>a+c.totalRewardsRedeemed,0);
+  const allCusts=getAllCustomers();
+
+  document.getElementById('adm-cafes').textContent=activeCafes.length;
+  document.getElementById('adm-cust').textContent=allCusts.length;
+  document.getElementById('adm-stamps').textContent=totalStamps;
+  document.getElementById('adm-rewards').textContent=totalRewards;
+
+  let liabilities=0,credits=0,pending=0,completed=0;
+  STATE.ledger.forEach(l=>{
+    if(l.type==='debit'&&l.amount<0)liabilities+=Math.abs(l.amount);
+    if(l.type==='credit'&&l.amount>0)credits+=l.amount;
+    if(l.status==='pending')pending+=Math.abs(l.amount);
+    if(l.status==='completed')completed+=Math.abs(l.amount);
+  });
+
+  document.getElementById('adm-liab').textContent='$'+liabilities.toFixed(2);
+  document.getElementById('adm-cred').textContent='$'+credits.toFixed(2);
+  document.getElementById('adm-pending').textContent='$'+pending.toFixed(2);
+  document.getElementById('adm-completed').textContent='$'+completed.toFixed(2);
+
+  document.getElementById('admin-activity').innerHTML=STATE.activities.slice(0,5).map(a=>{
+    const date=new Date(a.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    const cafe=STATE.cafes.find(c=>c.id===a.cafeId);
+    return `<div class="flex justify-between items-center py-8" style="border-bottom:1px solid var(--border)">
+      <div class="flex items-center gap-12">
+        <div class="cafe-av" style="background:${cafe?cafe.color+'15':'var(--bg-2)'};color:${cafe?cafe.color:'var(--text)'};width:32px;height:32px;font-size:12px">${cafe?cafe.initial:'?'}</div>
+        <div><p class="text-sm font-500">${a.customerName}</p><p class="text-xs text-2">${a.detail} · ${cafe?cafe.name:''}</p></div>
+      </div>
+      <span class="text-xs text-3">${date}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderAdminCafes(){
+  document.getElementById('admin-cafe-table').innerHTML=STATE.cafes.map(c=>{
+    const balanceColor=c.balance>=0?'var(--green)':'var(--red)';
+    return `<tr>
+      <td><div class="flex items-center gap-8"><div class="cafe-av" style="background:${c.color}15;color:${c.color};width:32px;height:32px;font-size:12px">${c.initial}</div><span class="font-500">${c.name}</span></div></td>
+      <td>${c.totalStampsIssued}</td>
+      <td>${c.totalRewardsRedeemed}</td>
+      <td style="color:${balanceColor};font-weight:600">${c.balance>=0?'+':''}$${c.balance.toFixed(2)}</td>
+      <td><span class="badge ${c.active?'badge-green':'badge-red'}">${c.active?'Active':'Suspended'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAdminCustomers(){
+  const allCusts=getAllCustomers();
+  document.getElementById('admin-cust-table').innerHTML=allCusts.map(c=>{
+    const visited=[...new Set(c.stamps.map(s=>s.cafeId))].length;
+    const initials=c.name.split(' ').map(n=>n[0]).join('');
+    return `<tr>
+      <td><div class="flex items-center gap-8"><div class="cafe-av" style="background:var(--blue-bg);color:var(--blue);width:32px;height:32px;font-size:12px">${initials}</div><span class="font-500">${c.name}</span></div></td>
+      <td>${c.stamps.length}</td>
+      <td>${c.redeemed.length}</td>
+      <td>${visited}</td>
+      <td class="text-2">${new Date(c.joined).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAdminSettlements(){
+  updateCalc();
+  document.getElementById('admin-settle-table').innerHTML=STATE.settlements.slice().reverse().map(s=>{
+    const date=new Date(s.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<tr>
+      <td class="text-2 font-mono">${s.id}</td>
+      <td class="text-2">${date}</td>
+      <td>${s.customerName}</td>
+      <td>${s.redeemCafeName}</td>
+      <td class="font-600">$${s.settlementValue.toFixed(2)}</td>
+      <td><span class="badge badge-green">${s.status}</span></td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="6" class="c text-2 py-16">No settlements yet</td></tr>';
+}
+
+function updateCalc(){
+  const a=parseInt(document.getElementById('calc-a').value)||0;
+  const b=parseInt(document.getElementById('calc-b').value)||0;
+  const val=parseFloat(document.getElementById('calc-val').value)||0;
+  const total=a+b;
+  if(total===0)return;
+  const aOwe=(a/total)*val;
+  const bOwe=(b/total)*val;
+  document.getElementById('calc-res-a').textContent='-$'+aOwe.toFixed(2);
+  document.getElementById('calc-res-b').textContent='-$'+bOwe.toFixed(2);
+  document.getElementById('calc-res-c').textContent='$'+val.toFixed(2);
+}
+
+function renderAdminStamps(){
+  let allStamps=[];
+  getAllCustomers().forEach(c=>{
+    c.stamps.forEach(s=>{allStamps.push({...s,customerName:c.name,customerId:c.id});});
+  });
+  document.getElementById('admin-stamps-table').innerHTML=allStamps.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).map(s=>{
+    const date=new Date(s.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    const cafe=STATE.cafes.find(c=>c.id===s.cafeId);
+    return `<tr>
+      <td class="text-2 font-mono">${s.id}</td>
+      <td class="text-2">${date}</td>
+      <td>${s.customerName}</td>
+      <td><div class="flex items-center gap-8"><div class="cafe-av" style="background:${cafe?cafe.color+'15':'var(--bg-2)'};color:${cafe?cafe.color:'var(--text)'};width:28px;height:28px;font-size:11px">${cafe?cafe.initial:'?'}</div><span>${cafe?cafe.name:'Unknown'}</span></div></td>
+      <td class="text-2">${s.staffId}</td>
+      <td><span class="badge ${s.status==='active'?'badge-green':'badge-amber'}">${s.status}</span></td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="6" class="c text-2 py-16">No stamps yet</td></tr>';
+}
+
+function renderAdminRewards(){
+  let allRewards=[];
+  getAllCustomers().forEach(c=>{
+    c.rewards.forEach(r=>allRewards.push({...r,customerName:c.name}));
+    c.redeemed.forEach(r=>allRewards.push({...r,customerName:c.name}));
+  });
+  document.getElementById('admin-rewards-table').innerHTML=allRewards.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(r=>{
+    const created=new Date(r.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const redeemed=r.redeemedAt?new Date(r.redeemedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'—';
+    const redeemCafe=r.redeemCafeId?STATE.cafes.find(c=>c.id===r.redeemCafeId)?.name:'—';
+    const totalStamps=r.stampsUsed?r.stampsUsed.length:10;
+    return `<tr>
+      <td class="text-2 font-mono">${r.id}</td>
+      <td class="text-2">${created}</td>
+      <td>${r.customerName}</td>
+      <td>${totalStamps} stamps</td>
+      <td>${redeemCafe}</td>
+      <td><span class="badge ${r.status==='available'?'badge-green':r.status==='redeemed'?'badge-blue':'badge-amber'}">${r.status}</span></td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="6" class="c text-2 py-16">No rewards yet</td></tr>';
+}
+
+function renderAdminLedger(){
+  document.getElementById('admin-ledger-table').innerHTML=STATE.ledger.slice().reverse().map(l=>{
+    const date=new Date(l.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const fromCafe=l.fromCafeId?STATE.cafes.find(c=>c.id===l.fromCafeId)?.name||'—':'—';
+    const toCafe=l.toCafeId?STATE.cafes.find(c=>c.id===l.toCafeId)?.name||'—':'—';
+    const color=l.amount<0?'var(--red)':l.amount>0?'var(--green-2)':'inherit';
+    return `<tr>
+      <td class="text-2 font-mono">${l.id}</td>
+      <td class="text-2">${date}</td>
+      <td><span class="badge ${l.type==='debit'?'badge-red':l.type==='credit'?'badge-green':'badge-blue'}">${l.type}</span></td>
+      <td class="text-sm">${fromCafe}</td>
+      <td class="text-sm">${toCafe}</td>
+      <td style="color:${color};font-weight:600">${l.amount!==0?(l.amount>0?'+':'')+'$'+Math.abs(l.amount).toFixed(2):'—'}</td>
+      <td class="text-sm text-2">${l.rewardId||'—'}</td>
+      <td><span class="badge badge-green">${l.status}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ==================== INIT ====================
+initState();
+</script>
+</body>
+</html>
